@@ -1,0 +1,52 @@
+// out: "../css/NavBar.module.css", compress: true, sourceMap: false
+
+@import "./mixins.less";
+
+.NavBar {
+    box-sizing: border-box;
+    padding: 0;
+
+    .NavBar__container {
+        max-width: 100%;
+
+        @media (min-width: 992px) {
+            max-width: 90%;
+        }
+
+        .NavBar__logo {
+            padding: 1em;
+        }
+
+        .NavBar__toggle {
+            border: unset;
+            color: @darkPrimary;
+        }
+
+        .NavBar__link {
+            color: @darkPrimary;
+
+            font-size: 1.1em;
+            background-color: @lightPrimary;
+            border-bottom: 1px @darkPrimary solid;
+            height: 8vh;
+            display: flex;
+            align-items: center;
+            padding: 1em;
+
+            &:nth-last-of-type(1) {
+                border-bottom: unset;
+            }
+
+
+            @media (min-width: 768px) {
+                background-color: unset;
+                border-bottom: unset;
+            }
+
+            i {
+                font-size: 1.25em;
+                padding: 0 .5em 0 0em;
+            }
+        }
+    }
+}
