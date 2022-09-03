@@ -17,18 +17,18 @@ const NavBar = () => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
 
-                        <NavLink to='/' className={styles.NavBar__link}>
-                            <i className="fas fa-book"></i>my books
+                        <NavLink exact to='/' className={styles.NavBar__link} activeClassName={styles.Active}>
+                            <i className="fas fa-book"></i><span>my books</span>
                         </NavLink>
 
-                        <NavLink to='/addbook' className={styles.NavBar__link}>
-                            <i className="fas fa-folder-plus"></i>add book
+                        <NavLink to='/addbook' className={styles.NavBar__link} activeClassName={styles.Active}>
+                            <i className="fas fa-folder-plus"></i><span>add book</span>
                         </NavLink>
-                        <NavLink to='/myprofile' className={styles.NavBar__link}>
-                            <i className="fas fa-user"></i>my profile
+                        <NavLink to='/myprofile' className={styles.NavBar__link} activeClassName={styles.Active}>
+                            <i className="fas fa-user"></i><span>my profile</span>
                         </NavLink>
-                        <NavLink to='/logout' className={styles.NavBar__link}>
-                            <i className="fas fa-sign-in-alt"></i>log out
+                        <NavLink to='/logout' className={styles.NavBar__link} activeClassName={styles.Active}>
+                            <i className="fas fa-sign-in-alt"></i><span>log out</span>
                         </NavLink>
                     </Nav>
                 </Navbar.Collapse>

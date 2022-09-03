@@ -2,6 +2,10 @@
 
 @import "./mixins.less";
 
+
+
+
+
 .NavBar {
     box-sizing: border-box;
     padding: 0;
@@ -34,9 +38,16 @@
             align-items: center;
             padding: 1em;
 
+            &:hover {
+                scale: 1.1;
+                text-decoration: none;
+            }
+
             &:nth-last-of-type(1) {
                 border-bottom: unset;
             }
+
+
 
 
             @media (min-width: 768px) {
@@ -47,6 +58,20 @@
             i {
                 font-size: 1.25em;
                 padding: 0 .5em 0 0em;
+            }
+
+        }
+
+
+        .Active {
+            span {
+
+                text-decoration: underline !important;
+            }
+
+            i {
+                text-decoration: none !important;
+
             }
         }
     }
