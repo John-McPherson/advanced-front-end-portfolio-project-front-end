@@ -14,6 +14,7 @@ function App() {
           <Route exact path="/addbook" render={() => <h1>Add Book</h1>} />
           <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
           <Route exact path="/logout" render={() => <h1>Log Out</h1>} />
+          <Route render={() => <h1>404: Page Not Found</h1>} />
         </Switch>
         {/* <h1>add books</h1>
         <h1>ny profile</h1>
