@@ -3,12 +3,30 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 import logo from "../assets/images/makecomics-logo.svg";
 import styles from "../assets/css/NavBar.module.css";
 import { NavLink } from 'react-router-dom'
+import axios from 'axios';
 
-import { useCurrentUser } from "../contexts/CurrentUserContext";
+
+import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
 
 const NavBar = () => {
 
     const currentUser = useCurrentUser();
+    const setCurrentUser = useSetCurrentUser();
+
+
+    const handleSignOut = async () => {
+
+        try {
+            await axios.post("/dj-rest-auth/logout/");
+            setCurrentUser(null)
+
+        } catch (err) {
+            console.log(err)
+
+            // setErrors(err.response?.data);
+
+        }
+    }
 
 
 
@@ -36,8 +54,8 @@ const NavBar = () => {
                                 <NavLink to='/myprofile' className={styles.NavBar__link} activeClassName={styles.Active}>
                                     <i className="fas fa-user"></i><span>my profile</span>
                                 </NavLink>
-                                <NavLink to='/logout' className={styles.NavBar__link} activeClassName={styles.Active}>
-                                    <i className="fas fa-sign-in-alt"></i><span>log out</span>
+                                <NavLink to='/signin' className={styles.NavBar__link} onClick={handleSignOut}>
+                                    <i className="fas fa-sign-out-alt"></i><span>log out</span>
                                 </NavLink>
                             </Nav>
                         </Navbar.Collapse>
