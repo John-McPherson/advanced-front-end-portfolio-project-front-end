@@ -11,3 +11,44 @@
 // container heights
 
 @navContainerHeight: 8vh;
+@inputHeights: 6vh;
+
+// paddings and margins
+
+@smallSpacing: 3vh;
+
+// utility classes
+
+.flex {
+    display: flex;
+}
+
+.flex__centered {
+    justify-content: center;
+    align-items: center;
+}
+
+
+// basic form elements
+
+.form__containter {
+    background-color: @lightPrimary;
+    border-radius: 50px;
+    // width: 90vw;
+    min-height: 60vh;
+    padding: 2vh;
+
+    @media (min-width: 992px) {
+
+        // width: 60vw;
+        padding: 5vh 2vh;
+
+    }
+
+
+}
+
+.form__inputs {
+    height: @inputHeights;
+    margin-bottom: 3vh;
+}
