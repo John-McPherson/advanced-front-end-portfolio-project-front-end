@@ -4,6 +4,7 @@ import logo from "../assets/images/makecomics-logo.svg";
 import styles from "../assets/css/NavBar.module.css";
 import { NavLink } from 'react-router-dom'
 import axios from 'axios';
+import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
 
 
 import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
@@ -13,6 +14,7 @@ const NavBar = () => {
     const currentUser = useCurrentUser();
     const setCurrentUser = useSetCurrentUser();
 
+    const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
     const handleSignOut = async () => {
 
@@ -31,7 +33,7 @@ const NavBar = () => {
 
 
     return (
-        <Navbar expand="md" fixed="top" className={styles.NavBar}>
+        <Navbar expanded={expanded} expand="md" fixed="top" className={styles.NavBar}>
             <Container className={styles.NavBar__container}>
                 <NavLink to='/'>
                     <Navbar.Brand className={styles.NavBar__logo}>
@@ -40,7 +42,7 @@ const NavBar = () => {
                 </NavLink>
                 {currentUser ?
                     <>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.NavBar__toggle} />
+                        <Navbar.Toggle ref={ref} onClick={() => setExpanded(!expanded)} aria-controls="basic-navbar-nav" className={styles.NavBar__toggle} />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ml-auto">
 
