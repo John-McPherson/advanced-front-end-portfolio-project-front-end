@@ -3,6 +3,10 @@
 @import "./mixins.less";
 
 body {
+    min-height: 100vh;
+    width: 100vw;
+
+
     * {
         margin: 0;
         padding: 0;
@@ -17,4 +21,28 @@ body {
     .Main {
         padding-top: @navContainerHeight;
     }
+}
+
+.Btn {
+    color: @lightPrimary;
+    background-color: @darkPrimary;
+    border: unset;
+    width: 100%;
+    height: @inputHeights;
+    font-weight: 600;
+    font-size: 1.1em;
+    border-radius: 0;
+    transition: all .5s;
+
+    &:hover {
+        color: @lightPrimary;
+        background-color: @darkPrimary;
+        scale: 1.1;
+    }
+}
+
+// reset bootstrap paddings
+.Remove__margins_paddings {
+    // margin: 0;
+    // padding: 0;
 }
