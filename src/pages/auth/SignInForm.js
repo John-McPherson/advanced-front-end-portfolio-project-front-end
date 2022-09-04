@@ -9,8 +9,10 @@ import appStyles from "../../App.module.css";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
 
 const SignUpForm = () => {
+    const setCurrentUser = useSetCurrentUser();
 
     const [signInData, setsignInData] = useState({
         username: '',
@@ -39,7 +41,8 @@ const SignUpForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("/dj-rest-auth/login/", signInData);
+            const { data } = await axios.post("/dj-rest-auth/login/", signInData);
+            setCurrentUser(data.user)
             history.push("/");
         } catch (err) {
             console.log('called')

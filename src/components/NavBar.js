@@ -4,7 +4,14 @@ import logo from "../assets/images/makecomics-logo.svg";
 import styles from "../assets/css/NavBar.module.css";
 import { NavLink } from 'react-router-dom'
 
+import { useCurrentUser } from "../contexts/CurrentUserContext";
+
 const NavBar = () => {
+
+    const currentUser = useCurrentUser();
+
+
+
     return (
         <Navbar expand="md" fixed="top" className={styles.NavBar}>
             <Container className={styles.NavBar__container}>
@@ -13,25 +20,32 @@ const NavBar = () => {
                         <img src={logo} alt="logo" height="20" />
                     </Navbar.Brand>
                 </NavLink>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.NavBar__toggle} />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="ml-auto">
+                {currentUser ?
+                    <>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.NavBar__toggle} />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="ml-auto">
 
-                        <NavLink exact to='/' className={styles.NavBar__link} activeClassName={styles.Active}>
-                            <i className="fas fa-book"></i><span>my books</span>
-                        </NavLink>
+                                <NavLink exact to='/' className={styles.NavBar__link} activeClassName={styles.Active}>
+                                    <i className="fas fa-book"></i><span>my books</span>
+                                </NavLink>
 
-                        <NavLink to='/addbook' className={styles.NavBar__link} activeClassName={styles.Active}>
-                            <i className="fas fa-folder-plus"></i><span>add book</span>
-                        </NavLink>
-                        <NavLink to='/myprofile' className={styles.NavBar__link} activeClassName={styles.Active}>
-                            <i className="fas fa-user"></i><span>my profile</span>
-                        </NavLink>
-                        <NavLink to='/logout' className={styles.NavBar__link} activeClassName={styles.Active}>
-                            <i className="fas fa-sign-in-alt"></i><span>log out</span>
-                        </NavLink>
-                    </Nav>
-                </Navbar.Collapse>
+                                <NavLink to='/addbook' className={styles.NavBar__link} activeClassName={styles.Active}>
+                                    <i className="fas fa-folder-plus"></i><span>add book</span>
+                                </NavLink>
+                                <NavLink to='/myprofile' className={styles.NavBar__link} activeClassName={styles.Active}>
+                                    <i className="fas fa-user"></i><span>my profile</span>
+                                </NavLink>
+                                <NavLink to='/logout' className={styles.NavBar__link} activeClassName={styles.Active}>
+                                    <i className="fas fa-sign-in-alt"></i><span>log out</span>
+                                </NavLink>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </>
+
+                    : ""
+                }
+
             </Container>
         </Navbar>
     );

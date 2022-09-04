@@ -5,28 +5,36 @@ import { Route, Switch } from 'react-router-dom';
 import './api/axiosDefaults';
 import SignUpForm from './pages/auth/SignUpForm';
 import SignInForm from './pages/auth/SignInForm';
+import { createContext } from 'react';
+
+
+
+export const CurrentUserContext = createContext();
+export const SetCurrentUserContext = createContext();
 
 
 function App() {
+
+
+
+
   return (
-    <div className={styles.App}>
-      <NavBar />
-      <Container className={styles.Main}>
-        <Switch>
-          <Route exact path="/" render={() => <h1>Home Page</h1>} />
-          <Route exact path="/addbook" render={() => <h1>Add Book</h1>} />
-          <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
-          <Route exact path="/signup" render={() => <SignUpForm />} />
-          <Route exact path="/signin" render={() => <SignInForm />} />
-          <Route render={() => <h1>404: Page Not Found</h1>} />
-        </Switch>
-        {/* <h1>add books</h1>
-        <h1>ny profile</h1>
-        <h1>add logout</h1> */}
-      </Container>
+    
 
-
-    </div>
+        <div className={styles.App}>
+          <NavBar />
+          <Container className={styles.Main}>
+            <Switch>
+              <Route exact path="/" render={() => <h1>Home Page</h1>} />
+              <Route exact path="/addbook" render={() => <h1>Add Book</h1>} />
+              <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
+              <Route exact path="/signup" render={() => <SignUpForm />} />
+              <Route exact path="/signin" render={() => <SignInForm />} />
+              <Route render={() => <h1>404: Page Not Found</h1>} />
+            </Switch>
+          </Container>
+        </div>
+    
   );
 }
 
