@@ -56,7 +56,7 @@ const NavBar = () => {
                                 <NavLink to='/myprofile' className={styles.NavBar__link} activeClassName={styles.Active}>
                                     <i className="fas fa-user"></i><span>my profile</span>
                                 </NavLink>
-                                <NavLink to='/signin' className={styles.NavBar__link} onClick={handleSignOut}>
+                                <NavLink to='/' className={styles.NavBar__link} onClick={handleSignOut}>
                                     <i className="fas fa-sign-out-alt"></i><span>log out</span>
                                 </NavLink>
                             </Nav>
