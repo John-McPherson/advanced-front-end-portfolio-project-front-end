@@ -9,8 +9,12 @@ import appStyles from "../../App.module.css";
 import { Form, Button, Col, Row, Container, Image } from "react-bootstrap";
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
+import { axiosReq } from "../../api/axiosDefaults";
 
 const SignUpForm = () => {
+
+    const setCurrentUser = useSetCurrentUser();
 
     const [signUpData, setSignUpData] = useState({
         username: '',
@@ -18,20 +22,31 @@ const SignUpForm = () => {
         password2: '',
         writer: false,
         artist: false,
-        colourist: false,
+        colorist: false,
         letterer: false,
         editor: false,
         image: defaultImage
     });
 
+    const [signInData, setsignInData] = useState({
+        username: '',
+        password: '',
+
+    });
+
+
     const { username,
+
         password1,
         password2,
         writer,
         artist,
-        colourist,
+        colorist,
         letterer,
         editor } = signUpData;
+
+
+
 
     const [errors, setErrors] = useState({});
 
@@ -41,8 +56,17 @@ const SignUpForm = () => {
         setSignUpData({
             ...signUpData,
             [e.target.name]: e.target.value,
+
         });
-        console.log(signUpData)
+        setsignInData({
+            ...signInData,
+            password: signUpData.password1,
+            username: signUpData.username,
+
+        });
+
+
+
 
     };
 
@@ -51,7 +75,7 @@ const SignUpForm = () => {
             ...signUpData,
             [e.target.name]: e.target.checked,
         });
-        console.log(signUpData)
+
 
     };
 
@@ -65,11 +89,24 @@ const SignUpForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', username);
+        formData.append('writer', writer);
+        formData.append('artist', artist);
+        formData.append('colorist', colorist);
+        formData.append('letterer', letterer);
+        formData.append('editor', editor);
+
         try {
-            await axios.post("/dj-rest-auth/registration/", signUpData);
-            history.push("/signin");
+         
+            const { data } = await axios.post("/dj-rest-auth/registration/", signUpData)
+            await axios.post("/dj-rest-auth/login/", signInData)
+            setCurrentUser(data.user)
+
+            await axiosReq.put(`/profiles/${data.user.profile_id}/`, formData)
+            history.push("/");
         } catch (err) {
-            console.log('called')
+   
             setErrors(err.response?.data);
 
         }
@@ -127,11 +164,11 @@ const SignUpForm = () => {
                                 </div>
                             </div>
                             <div className={styles.Form__Input_Group__Skills} >
-                                <Form.Check inline className={signUpData.writer ? styles.Form__Input_Group__Skills__Selected : ''} label="writer" value={signUpData.writer} name="writer" checked={signUpData.writer} type="checkbox" id={`writer`} onChange={handleChecked} />
-                                <Form.Check inline className={signUpData.artist ? styles.Form__Input_Group__Skills__Selected : ''} label="artist" value={signUpData.artist} name="artist" checked={signUpData.artist} type="checkbox" id={`artist`} onChange={handleChecked} />
-                                <Form.Check inline className={signUpData.colourist ? styles.Form__Input_Group__Skills__Selected : ''} label="colourist" value={signUpData.colourist} name="colourist" checked={signUpData.colourist} type="checkbox" id={`colourist`} onChange={handleChecked} />
-                                <Form.Check inline className={signUpData.letterer ? styles.Form__Input_Group__Skills__Selected : ''} label="letterer" name="letterer" value={signUpData.letterer} checked={signUpData.letterer} type="checkbox" id={`letterer`} onChange={handleChecked} />
-                                <Form.Check inline className={signUpData.editor ? styles.Form__Input_Group__Skills__Selected : ''} label="editor" name="editor" value={signUpData.editor} checked={signUpData.editor} type="checkbox" id={`editor`} onChange={handleChecked} />
+                                <Form.Check inline className={signUpData.writer ? styles.Form__Input_Group__Skills__Selected : ''} label="writer" value={writer} name="writer" checked={signUpData.writer} type="checkbox" id={`writer`} onChange={handleChecked} />
+                                <Form.Check inline className={signUpData.artist ? styles.Form__Input_Group__Skills__Selected : ''} label="artist" value={artist} name="artist" checked={signUpData.artist} type="checkbox" id={`artist`} onChange={handleChecked} />
+                                <Form.Check inline className={signUpData.colorist ? styles.Form__Input_Group__Skills__Selected : ''} label="colorist" value={colorist} name="colorist" checked={signUpData.colorist} type="checkbox" id={`colorist`} onChange={handleChecked} />
+                                <Form.Check inline className={signUpData.letterer ? styles.Form__Input_Group__Skills__Selected : ''} label="letterer" name="letterer" value={letterer} checked={signUpData.letterer} type="checkbox" id={`letterer`} onChange={handleChecked} />
+                                <Form.Check inline className={signUpData.editor ? styles.Form__Input_Group__Skills__Selected : ''} label="editor" name="editor" value={editor} checked={signUpData.editor} type="checkbox" id={`editor`} onChange={handleChecked} />
                             </div>
                         </Form.Group>
 
