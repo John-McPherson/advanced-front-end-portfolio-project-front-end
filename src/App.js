@@ -6,6 +6,7 @@ import './api/axiosDefaults';
 import SignUpForm from './pages/auth/SignUpForm';
 import SignInForm from './pages/auth/SignInForm';
 import { createContext } from 'react';
+import { HomePage } from './components/HomePage';
 
 
 
@@ -19,22 +20,22 @@ function App() {
 
 
   return (
-    
 
-        <div className={styles.App}>
-          <NavBar />
-          <Container className={styles.Main}>
-            <Switch>
-              <Route exact path="/" render={() => <h1>Home Page</h1>} />
-              <Route exact path="/addbook" render={() => <h1>Add Book</h1>} />
-              <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
-              <Route exact path="/signup" render={() => <SignUpForm />} />
-              <Route exact path="/signin" render={() => <SignInForm />} />
-              <Route render={() => <h1>404: Page Not Found</h1>} />
-            </Switch>
-          </Container>
-        </div>
-    
+
+    <div className={styles.App}>
+      <NavBar />
+      <Container className={styles.Main}>
+        <Switch>
+          <Route exact path="/" render={() => <HomePage />} />
+          <Route exact path="/addbook" render={() => <h1>Add Book</h1>} />
+          <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
+          <Route exact path="/signup" render={() => <SignUpForm />} />
+          <Route exact path="/signin" render={() => <SignInForm />} />
+          <Route render={() => <h1>404: Page Not Found</h1>} />
+        </Switch>
+      </Container>
+    </div>
+
   );
 }
 
