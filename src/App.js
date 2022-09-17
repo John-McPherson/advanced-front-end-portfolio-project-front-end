@@ -7,6 +7,7 @@ import SignUpForm from './pages/auth/SignUpForm';
 import SignInForm from './pages/auth/SignInForm';
 import { createContext } from 'react';
 import { HomePage } from './components/HomePage';
+import NewProject from './project/NewProject';
 
 
 
@@ -27,7 +28,7 @@ function App() {
       <Container className={styles.Main}>
         <Switch>
           <Route exact path="/" render={() => <HomePage />} />
-          <Route exact path="/addbook" render={() => <h1>Add Book</h1>} />
+          <Route exact path="/addbook" render={() => <NewProject />} />
           <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/signin" render={() => <SignInForm />} />
