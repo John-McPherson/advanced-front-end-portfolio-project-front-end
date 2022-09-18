@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { Link } from "react-router-dom";
 import defaultImage from "../assets/images/default-profile.svg"
 
@@ -7,13 +7,14 @@ import formStyles from "../assets/css/Forms.module.css"
 import appStyles from "../App.module.css";
 
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
-// import axios from 'axios';
-// import { axiosReq } from "../api/axiosDefaults";
+import axios from 'axios';
+import { axiosReq } from "../api/axiosDefaults";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useSetCurrentUser } from "../contexts/CurrentUserContext";
 import Collaborators from "./Collaborators";
 
 const NewProject = () => {
+
 
     const setCurrentUser = useSetCurrentUser();
 
@@ -37,7 +38,7 @@ const NewProject = () => {
     });
 
 
-    const { username,
+    const {
 
         title,
         owner,
@@ -93,6 +94,8 @@ const NewProject = () => {
         let roleName = e.target.name;
         let i = e.target.dataset.index
         role.roles[i][roleName] = e.target.value
+        console.log(e.target.value)
+
 
 
         setRole({
@@ -107,16 +110,19 @@ const NewProject = () => {
         let updatedEditors = new Set();
 
         for (let x of role.roles) {
+            console.log(x)
             if (x.username) {
 
                 if (x.role == 'writer') {
                     updatedWriters.add(x.username);
                 } else if (x.role == 'artist') {
-                    updatedArtists.add(x.username);
+                    updatedArtists.add(parseInt(x.username));
                 } else if (x.role == 'colorist') {
                     updatedColorists.add(x.username);
                 } else if (x.role == 'editor') {
                     updatedEditors.add(x.username);
+                } else if (x.role == 'letterer') {
+                    updatedLetterers.add(x.username);
                 }
             }
         }
@@ -157,19 +163,26 @@ const NewProject = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        console.log(artists)
+
+        formData.append("title", title);
+        formData.append("color", color);
+        formData.append("pages", pages);
+        formData.append('artists', artists);
+        formData.append('writers', writers);
+        formData.append('editiors', editiors);
+        formData.append('colorists', colorists);
+        formData.append('letterers', letterers);
 
         try {
-            console.log(projectData)
-
-            // const { data } = await axios.post("/dj-rest-auth/registration/", projectData)
-            // setCurrentUser(data.user)
-
-            // await axiosReq.put(`/profiles/${data.user.profile_id}/`, formData)
-            // history.push("/");
+            const { data } = await axiosReq.post("/project/", formData);
+            history.push(`/project/${data.id}`);
         } catch (err) {
-
-            setErrors(err.response?.data);
-
+            console.log(err);
+            if (err.response?.status !== 401) {
+                setErrors(err.response?.data);
+            }
         }
     }
 
@@ -241,10 +254,10 @@ const NewProject = () => {
                 </Col>
             </Row >
             {collaborators.collaborators.map(x =>
-                <Row>
+                <Row key={x}>
 
 
-                    <Collaborators updateColabs={updateColabs} role={role} i={x} />
+                    <Collaborators updateColabs={updateColabs} role={role} i={x} defaultValue={''} />
 
 
 
