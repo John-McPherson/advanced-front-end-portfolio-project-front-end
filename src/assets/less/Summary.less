@@ -1,0 +1,48 @@
+// out: "../css/Summary.module.css", compress: true, sourceMap: false
+
+
+@import "./mixins.less";
+
+.main__container {
+    width: 100vh;
+    min-height: 100vh;
+    margin-top: 10vh;
+}
+
+.item {
+
+    text-align: center;
+    margin: 2vw;
+
+    &__image_container {
+        position: relative;
+    }
+
+    img {
+        width: 100%;
+        border-radius: 10px;
+        background-color: red;
+    }
+
+    h2 {
+        font-size: 1em;
+        font-weight: 700;
+        margin-top: .5vh;
+    }
+
+    &__edit_btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: @darkPrimary;
+        color: @lightPrimary ;
+        border: 2px solid @lightPrimary;
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        right: 15px;
+        bottom: 0;
+        font-size: .8em;
+
+    }
+}
