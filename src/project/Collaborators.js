@@ -96,11 +96,11 @@ const Collaborators = ({ updateColabs, role, i }) => {
                         <Form.Label className="d-none">select collaborator</Form.Label>
                         <Form.Control as="select" value={role.roles[i].username} name='username' onChange={updateColabs} data-index={i}>
                             <option disabled value={''}> -- select a collaborator -- </option>
-                            {role.roles[i].role == 'writer' ? creators.writers[0].map((type) => <option value={type.name} key={type.id}>{type.name}</option>) :
+                            {role.roles[i].role == 'writer' ? creators.writers[0].map((type) => <option value={type.id} key={type.id}>{type.name}</option>) :
                                 role.roles[i].role == 'artist' ? creators.artists[0].map((type) => <option value={type.id} key={type.id}>{type.name}</option>) :
                                     role.roles[i].role == 'colorist' ? creators.colorists[0].map((type) => <option value={type.id} key={type.id}>{type.name}</option>) :
-                                        role.roles[i].role == 'letterer' ? creators.letterers[0].map((type) => <option value={type.name} key={type.id}>{type.name}</option>) :
-                                            role.roles[i].role == 'editor' ? creators.editors[0].map((type) => <option value={type.name} key={type.id}>{type.name}</option>) : ''}
+                                        role.roles[i].role == 'letterer' ? creators.letterers[0].map((type) => <option value={type.id} key={type.id}>{type.name}</option>) :
+                                            role.roles[i].role == 'editor' ? creators.editors[0].map((type) => <option value={type.id} key={type.id}>{type.name}</option>) : ''}
 
 
                         </Form.Control>

@@ -6,6 +6,7 @@ import formStyles from "../assets/css/Forms.module.css"
 
 import appStyles from "../App.module.css";
 
+
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import axios from 'axios';
 import { axiosReq } from "../api/axiosDefaults";
@@ -114,15 +115,15 @@ const NewProject = () => {
             if (x.username) {
 
                 if (x.role == 'writer') {
-                    updatedWriters.add(x.username);
+                    updatedWriters.add(parseInt(x.username));
                 } else if (x.role == 'artist') {
                     updatedArtists.add(parseInt(x.username));
                 } else if (x.role == 'colorist') {
-                    updatedColorists.add(x.username);
+                    updatedColorists.add(parseInt(x.username));
                 } else if (x.role == 'editor') {
-                    updatedEditors.add(x.username);
+                    updatedEditors.add(parseInt(x.username));
                 } else if (x.role == 'letterer') {
-                    updatedLetterers.add(x.username);
+                    updatedLetterers.add(parseInt(x.username));
                 }
             }
         }
@@ -164,16 +165,29 @@ const NewProject = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        console.log(artists)
+        console.log(writers)
 
         formData.append("title", title);
         formData.append("color", color);
         formData.append("pages", pages);
-        formData.append('artists', artists);
-        formData.append('writers', writers);
-        formData.append('editors', editors);
-        formData.append('colorists', colorists);
-        formData.append('letterers', letterers);
+        // console.log(artists != [])
+        if (artists.length) {
+            formData.append('artists', artists);
+        }
+        if (writers.length) {
+            formData.append('writers', writers);
+        }
+        if (editors.length) {
+            formData.append('editors', editors);
+        }
+        if (colorists.length) {
+            formData.append('colorists', colorists);
+            console.log(colorists)
+        }
+        if (letterers.length) {
+            formData.append('letterers', letterers);
+            console.log(letterers)
+        }
 
         try {
             const { data } = await axiosReq.post("/project/", formData);
@@ -201,11 +215,11 @@ const NewProject = () => {
                             <Form.Control type="text" placeholder="enter title here..." name='title' value={title}
                                 onChange={handleChange} />
                         </Form.Group>
-                        {/* {errors.title?.map((message, idx) => (
-                            <p key={idx} className={styles.Form__Input_Warning}>
+                        {errors.title?.map((message, idx) => (
+                            <p key={idx} className={formStyles.Form__Input_Warning}>
                                 {message}
                             </p>
-                        ))} */}
+                        ))}
                     </Container>
                 </Col>
             </Row>
@@ -219,11 +233,11 @@ const NewProject = () => {
                             <Form.Label>Pages</Form.Label>
                             <Form.Control type="number" name='pages' value={pages} onChange={handleChange} />
                         </Form.Group>
-                        {/* {errors.pages?.map((message, idx) => (
-                            <p key={idx} className={styles.Form__Input_Warning}>
+                        {errors.pages?.map((message, idx) => (
+                            <p key={idx} className={formStyles.Form__Input_Warning}>
                                 {message}
                             </p>
-                        ))} */}
+                        ))}
                     </Container>
                 </Col>
                 <Col className={` ${formStyles.Form__Container__Col}`} md={6}>
@@ -237,11 +251,11 @@ const NewProject = () => {
                                 <Form.Check inline className={projectData.color ? '' : formStyles.Form__Input_Group__Skills__Selected} label="No" value={false} name="color" checked={!projectData.color} type="radio" id={`color-no`} onChange={handleChecked} />
                             </div>
                         </Form.Group>
-                        {/* {errors.pages?.map((message, idx) => (
-                            <p key={idx} className={styles.Form__Input_Warning}>
+                        {errors.color?.map((message, idx) => (
+                            <p key={idx} className={formStyles.Form__Input_Warning}>
                                 {message}
                             </p>
-                        ))} */}
+                        ))}
                     </Container>
                 </Col>
             </Row>
@@ -264,6 +278,30 @@ const NewProject = () => {
                 </Row >
 
             )}
+            {errors.writers?.map((message, idx) => (
+                <p key={idx} className={formStyles.Form__Input_Warning}>
+                    Writers:  {message}
+                </p>
+            ))}
+            {errors.artists?.map((message, idx) => (
+                <p key={idx} className={formStyles.Form__Input_Warning}>
+                    Artists:   {message}
+                </p>
+            ))}
+            {errors.colorists?.map((message, idx) => (
+                <p key={idx} className={formStyles.Form__Input_Warning}>
+                    Colorists:  {message}
+                </p>
+            ))}
+            {errors.editors?.map((message, idx) => (
+                <p key={idx} className={formStyles.Form__Input_Warning}>
+                    Editors:   {message}
+                </p>
+            ))}        {errors.letterers?.map((message, idx) => (
+                <p key={idx} className={formStyles.Form__Input_Warning}>
+                    Letterers:   {message}
+                </p>
+            ))}
             <Row>
                 <Col className={` ${formStyles.Form__Container__Col}`} md={12}>
                     <Container className={appStyles.Remove__margins_paddings} >
