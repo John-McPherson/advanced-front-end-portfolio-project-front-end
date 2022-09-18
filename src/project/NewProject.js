@@ -171,7 +171,7 @@ const NewProject = () => {
         formData.append("pages", pages);
         formData.append('artists', artists);
         formData.append('writers', writers);
-        formData.append('editiors', editiors);
+        formData.append('editors', editors);
         formData.append('colorists', colorists);
         formData.append('letterers', letterers);
 
