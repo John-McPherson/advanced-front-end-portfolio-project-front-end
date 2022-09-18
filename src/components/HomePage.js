@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 
 import { useCurrentUser } from "../contexts/CurrentUserContext";
+import AllProjects from '../project/AllProjects';
 export const HomePage = () => {
 
     const currentUser = useCurrentUser();
@@ -13,7 +14,7 @@ export const HomePage = () => {
     return (
 
         <div>
-            {currentUser ? <h1>logged in</h1> :
+            {currentUser ? <AllProjects /> :
                 <div className={styles.Homepage__LoggedOut} >
                     <NavLink to='/signin' className={appStyles.btn}>
                         <Button type="submit" className={appStyles.Btn}>
