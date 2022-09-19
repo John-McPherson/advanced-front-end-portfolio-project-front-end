@@ -8,6 +8,7 @@ import SignInForm from './pages/auth/SignInForm';
 import { createContext } from 'react';
 import { HomePage } from './components/HomePage';
 import NewProject from './project/NewProject';
+import SingleProject from './project/singleProject';
 
 
 
@@ -29,6 +30,8 @@ function App() {
         <Switch>
           <Route exact path="/" render={() => <HomePage />} />
           <Route exact path="/addbook" render={() => <NewProject />} />
+          <Route exact path="/book/:id" render={() => <SingleProject />} />
+          <Route exact path="/editbook/:id" render={() => <SingleProject />} />
           <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/signin" render={() => <SignInForm />} />

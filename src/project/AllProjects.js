@@ -7,6 +7,7 @@ import defaultImage from "../assets/images/default-page.png"
 
 import appStyles from "../App.module.css";
 import styles from "../assets/css/Summary.module.css"
+import { Link } from "react-router-dom";
 
 
 const AllProjects = () => {
@@ -40,17 +41,24 @@ const AllProjects = () => {
                     < Col xs={2} className={styles.item} key={project.id}>
                         <Row>
                             <Col className={styles.item__image_container}>
-                                <Image src={defaultImage} className='item__image' />
-                                {project.is_owner ?
-                                    <div className={styles.item__edit_btn}>
-                                        <i className="fa-solid fa-pencil"></i>
-                                    </div>
-                                    : ""}
+                                <Link to={`book/${project.id}`}>
+
+                                    <Image src={defaultImage} className='item__image' />
+                                    {project.is_owner ?
+                                        <Link to={`editbook/${project.id}`}>
+                                            <div className={styles.item__edit_btn}>
+                                                <i className="fa-solid fa-pencil"></i>
+                                            </div>
+                                        </Link>
+                                        : ""}
+                                </Link>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
-                                <h2>{project.title}</h2>
+                                <Link to={`book/${project.id}`}>
+                                    <h2>{project.title}</h2>
+                                </Link>
                             </Col>
                         </Row>
                     </Col>
