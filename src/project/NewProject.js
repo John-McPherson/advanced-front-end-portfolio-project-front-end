@@ -148,7 +148,7 @@ const NewProject = () => {
 
     };
 
-    const addCollab = (e) => {
+    const addCollab = () => {
         collaborators.collaborators = [...collaborators.collaborators, collaborators.collaborators.length]
         role.roles = [...role.roles, { role: '', username: '' }]
         setCollaborators({
@@ -165,12 +165,12 @@ const NewProject = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
+
         console.log(writers)
 
         formData.append("title", title);
         formData.append("color", color);
         formData.append("pages", pages);
-        // console.log(artists != [])
         if (artists.length) {
             formData.append('artists', artists);
         }
@@ -191,16 +191,45 @@ const NewProject = () => {
 
         try {
             const { data } = await axiosReq.post("/project/", formData);
-            history.push(`/project/${data.id}`);
+            createPages(data.id)
+            history.push(`/book/${data.id}`);
         } catch (err) {
-            console.log(err);
-            if (err.response?.status !== 401) {
-                setErrors(err.response?.data);
-            }
+            // console.log(err);
+            // if (err.response?.status !== 401) {
+            //     setErrors(err.response?.data);
+            // }
         }
     }
 
+    const createPages = (projectId) => {
+        console.log(projectId)
+        let pageNumber = 1;
+        let pages = [{ book: projectId, pageNumber: 'Cover' }];
+        while (pageNumber <= projectData.pages) {
 
+            let page = {
+                book: projectId,
+                pageNumber: 'Page ' + pageNumber
+            }
+            pages.push(page)
+            pageNumber++
+        }
+        pages.map(async (page) => {
+            const projectData = new FormData();
+            projectData.append("title", page.pageNumber);
+            projectData.append("project", projectId);
+            console.log(page.pageNumber)
+            try {
+                await axiosReq.post("/pages/", projectData);
+                // history.push(`/project/${data.id}`);
+            } catch (err) {
+                console.log(err);
+                // if (err.response?.status !== 401) {
+                //     setErrors(err.response?.data);
+                // }
+            }
+        })
+    }
 
 
     return (
