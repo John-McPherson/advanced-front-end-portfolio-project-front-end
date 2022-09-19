@@ -32,6 +32,7 @@ function App() {
           <Route exact path="/addbook" render={() => <NewProject />} />
           <Route exact path="/book/:id" render={() => <SingleProject />} />
           <Route exact path="/editbook/:id" render={() => <SingleProject />} />
+          <Route exact path="/page/:id" render={() => <h1>Page placeholder</h1>} />
           <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/signin" render={() => <SignInForm />} />
