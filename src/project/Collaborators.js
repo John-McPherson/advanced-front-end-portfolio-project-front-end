@@ -26,15 +26,15 @@ const Collaborators = ({ updateColabs, role, i }) => {
                 const [{ data: profiles }] = await Promise.all([
                     axiosReq.get(`/profiles/`),
                 ]);
-                console.log('run')
-                setCreators({
-                    artists: [profiles.results.filter(profile => profile.artist)],
-                    writers: [profiles.results.filter(profile => profile.writer)],
-                    editors: [profiles.results.filter(profile => profile.editor)],
-                    colorists: [profiles.results.filter(profile => profile.colorist)],
-                    letterers: [profiles.results.filter(profile => profile.letterer)],
-                })
+                console.log(profiles)
 
+                setCreators({
+                    artists: [profiles.filter(profile => profile.artist)],
+                    writers: [profiles.filter(profile => profile.writer)],
+                    editors: [profiles.filter(profile => profile.editor)],
+                    colorists: [profiles.filter(profile => profile.colorist)],
+                    letterers: [profiles.filter(profile => profile.letterer)],
+                })
                 // console.log(creators.artists)
                 // profiles.results.forEach(profile => {
                 //     if (profile.artist) {
@@ -51,24 +51,6 @@ const Collaborators = ({ updateColabs, role, i }) => {
 
     }, []);
 
-
-
-    const test = (e) => {
-        creators.artists[0].map((type) => console.log(type))
-    };
-
-    const writers = [
-        { username: 'John' }, { username: 'Jack' }, { username: 'Jim' }, { username: 'James' },
-    ]
-    const letterers = [
-        { username: 'blambot' }, { username: 'Sandra' }, { username: 'kevin' }, { username: 'Tim' },
-    ]
-    const colorists = [
-        { username: 'Shan' }, { username: 'Sandra' }, { username: 'kevin' }, { username: 'Tim' },
-    ]
-    const editors = [
-        { username: 'Linda' }, { username: 'Sandra' }, { username: 'kevin' }, { username: 'Tim' },
-    ]
 
 
 
