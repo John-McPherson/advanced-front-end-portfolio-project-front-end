@@ -5,7 +5,7 @@ import { Col, Container, Image, Row } from 'react-bootstrap'
 import defaultImage from "../assets/images/default-page.png"
 
 
-import appStyles from "../App.module.css";
+// import appStyles from "../App.module.css";
 import styles from "../assets/css/Summary.module.css"
 import { Link } from "react-router-dom";
 
