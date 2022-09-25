@@ -10,6 +10,7 @@ import { HomePage } from './components/HomePage';
 import NewProject from './project/NewProject';
 import SingleProject from './project/SingleProject';
 import SinglePage from './project/SinglePage';
+import ProfilePage from './pages/auth/Profile';
 
 
 
@@ -34,7 +35,7 @@ function App() {
           <Route exact path="/book/:id" render={() => <SingleProject />} />
           <Route exact path="/editbook/:id" render={() => <SingleProject />} />
           <Route exact path="/page/:id" render={() => <SinglePage />} />
-          <Route exact path="/myprofile" render={() => <h1>My Profile</h1>} />
+          <Route exact path="/myprofile" render={() => <ProfilePage />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route render={() => <h1>404: Page Not Found</h1>} />
