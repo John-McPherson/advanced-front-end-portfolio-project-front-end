@@ -1,0 +1,44 @@
+// out: "../css/Comment.module.css", compress: true, sourceMap: false
+
+@import "./mixins.less";
+
+.commentForm {
+    background-color: @lightPrimary;
+    padding: 2vh;
+
+    .commentContainer {
+        position: relative;
+        display: flex;
+
+        textarea {
+            background-color: #FFFFFF;
+            border: unset;
+            border-radius: 10%;
+
+        }
+
+        button {
+            position: absolute;
+            font-size: .9em;
+            color: #ffffff;
+            bottom: -15px;
+            right: 2vw;
+            height: 30px;
+            width: 80px;
+            border-radius: 25px;
+            border: unset;
+            background-color: @darkPrimary;
+            z-index: 1000;
+
+        }
+
+        .profilePicture {
+            width: 50px;
+            height: 50px;
+            margin-right: 1vw;
+            align-self: top;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+}
