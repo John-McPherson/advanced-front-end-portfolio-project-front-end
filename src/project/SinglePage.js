@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { axiosReq } from "../api/axiosDefaults";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { Container, Row, Col, Image, Form } from "react-bootstrap";
+import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
 import styles from "../assets/css/SinglePage.module.css"
+import appStyles from "../App.module.css";
+import CommentForm from "./CommentForm";
+import Comment from "./Comment";
 
 const SinglePage = () => {
     const { id } = useParams();
 
+    const [errors, setErrors] = useState({});
+
     useEffect(() => {
         const HandleMount = async () => {
             try {
-                const [{ data: pages }] = await Promise.all([
+                const [{ data: pages }, { data: comments }] = await Promise.all([
                     axiosReq.get(`/page/${id}`),
+                    axiosReq.get(`/comments/?page=${id}`)
                 ]);
                 const [{ data: project }] = await Promise.all([
 
@@ -25,7 +31,7 @@ const SinglePage = () => {
                 } else if (!pages.inks.includes('default-page_xo6mbk')) {
                     active = 'inks'
                 }
-                console.log(pages.roughs)
+
                 setData({
                     page: pages,
                     project: project,
@@ -35,12 +41,16 @@ const SinglePage = () => {
                     colors: pages.colors,
                     letters: pages.letters
                 })
+                setComments({
+                    results: comments
+                })
+                // console.log(comments)
 
             } catch (err) {
                 console.log(err);
             }
         };
-
+        HandleMount();
     }, [id]);
 
     const [data, setData] = useState({
@@ -49,9 +59,17 @@ const SinglePage = () => {
         project: [],
         active: 'roughs',
         roughs: '',
+        roughsFile: '',
         inks: '',
         colors: '',
         letters: ''
+
+
+    });
+    const [comments, setComments] = useState({
+
+        results: [],
+
 
 
     });
@@ -61,10 +79,47 @@ const SinglePage = () => {
             ...data,
             [e.target.name]: e.target.value,
         });
-        console.log(data)
+
 
 
     };
+
+    const imageHandler = (e) => {
+        const target = data.active;
+
+        setData({
+            ...data,
+            [target]: URL.createObjectURL(e.target.files[0]),
+            [target + 'File']: e.target.files,
+        });
+
+
+    };
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(data.roughsFile)
+        const formData = new FormData();
+        formData.append('roughs', data.roughsFile[0]);
+        // formData.append('title', "new page");
+        // formData.append('artist', artist);
+        // formData.append('colorist', colorist);
+        // formData.append('letterer', letterer);
+        // formData.append('editor', editor);
+
+        try {
+
+            await axiosReq.put(`/page/${id}`, formData)
+
+        } catch (err) {
+            console.log(err)
+            setErrors(err.response?.data);
+
+        }
+    }
+
+
     return (
         <Container className={styles.main__container} fluid>
 
@@ -84,7 +139,7 @@ const SinglePage = () => {
                             </h2>
                         </Col>
                         <Col xs={6} className={styles.selectorcol} >
-                            <Form>
+                            <Form >
                                 <Form.Group controlId="activepage" >
 
                                     <div className={styles.page__selecter} >
@@ -103,7 +158,41 @@ const SinglePage = () => {
 
                 </Col>
                 <Col xs={12} md={6}>
-                    Comment section goes here...
+                    <Row>
+                        <Col xs={12}>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Label className="d-none">Update comic page</Form.Label>
+                                <Form.Control type="file" accept="image/png, image/jpeg" name='updatepage' onChange={imageHandler} />
+                                <Button type="submit" className={appStyles.Btn}>
+                                    Submit
+                                </Button>
+                                {errors.roughs?.map((message, idx) => (
+                                    <p key={idx} className={styles.Form__Input_Warning}>
+                                        {message}
+                                    </p>
+                                ))}
+                            </Form>
+
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col xs={12}>
+                            <CommentForm
+                                page={data.page.id}
+                                setComments={setComments} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12}>
+                            {comments.results.map(comment =>
+                                <Comment content={comment.content} author={32} timestamp={comment.created_at} owner={comment.owner} />
+
+
+                            )}
+                            {console.log(comments)}
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
         </Container>
