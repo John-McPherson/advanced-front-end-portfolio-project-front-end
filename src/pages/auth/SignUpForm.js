@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import defaultImage from "../../assets/images/default-profile.svg"
 
@@ -15,6 +15,7 @@ import { axiosReq } from "../../api/axiosDefaults";
 const SignUpForm = () => {
 
     const setCurrentUser = useSetCurrentUser();
+    const imageInput = useRef(null);
 
     const [signUpData, setSignUpData] = useState({
         username: '',
@@ -96,9 +97,13 @@ const SignUpForm = () => {
         formData.append('colorist', colorist);
         formData.append('letterer', letterer);
         formData.append('editor', editor);
+        if (imageInput?.current?.files[0]) {
+            formData.append("image", imageInput.current.files[0]);
+        }
+        console.log(imageInput.current.files[0])
 
         try {
-         
+
             const { data } = await axios.post("/dj-rest-auth/registration/", signUpData)
             await axios.post("/dj-rest-auth/login/", signInData)
             setCurrentUser(data.user)
@@ -106,7 +111,7 @@ const SignUpForm = () => {
             await axiosReq.put(`/profiles/${data.user.profile_id}/`, formData)
             history.push("/");
         } catch (err) {
-   
+
             setErrors(err.response?.data);
 
         }
@@ -194,8 +199,12 @@ const SignUpForm = () => {
                         <Form.Group controlId="profilepic" className={styles.Form__Input_Group}>
                             <span><i className="fa-solid fa-pen-ruler"></i></span>
                             <Form.Label className="d-none">Profile Picture</Form.Label>
-                            <Form.Control type="file" accept="image/png, image/jpeg" name='profilepic' onChange={imageHandler} />
-
+                            <Form.Control type="file" accept="image/png, image/jpeg" name='profilepic' ref={imageInput} onChange={imageHandler} />
+                            {errors.image?.map((message, idx) => (
+                                <p key={idx} className={styles.Form__Input_Warning}>
+                                    {message}
+                                </p>
+                            ))}
                         </Form.Group>
                     </Container>
 
