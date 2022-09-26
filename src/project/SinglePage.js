@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { axiosReq } from "../api/axiosDefaults";
+import { axiosReq, axiosRes } from "../api/axiosDefaults";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
 import styles from "../assets/css/SinglePage.module.css"
 import appStyles from "../App.module.css";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
+
 
 const SinglePage = () => {
     const { id } = useParams();
+
+
+
+    const history = useHistory();
 
     const [errors, setErrors] = useState({});
 
@@ -17,7 +24,9 @@ const SinglePage = () => {
             try {
                 const [{ data: pages }, { data: comments }] = await Promise.all([
                     axiosReq.get(`/page/${id}`),
-                    axiosReq.get(`/comments/?page=${id}`)
+                    axiosReq.get(`/comments/?page=${id}`),
+
+
                 ]);
                 const [{ data: project }] = await Promise.all([
 
@@ -44,7 +53,8 @@ const SinglePage = () => {
                 setComments({
                     results: comments
                 })
-                // console.log(comments)
+
+
 
             } catch (err) {
                 console.log(err);
@@ -61,8 +71,11 @@ const SinglePage = () => {
         roughs: '',
         roughsFile: '',
         inks: '',
+        inksFile: '',
         colors: '',
-        letters: ''
+        colorsFile: '',
+        letters: '',
+        lettersFile: ''
 
 
     });
@@ -99,23 +112,32 @@ const SinglePage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(data.roughsFile)
         const formData = new FormData();
-        formData.append('roughs', data.roughsFile[0]);
-        // formData.append('title', "new page");
-        // formData.append('artist', artist);
-        // formData.append('colorist', colorist);
-        // formData.append('letterer', letterer);
-        // formData.append('editor', editor);
+        formData.append('title', data.page.title)
+        formData.append('project', data.project.id)
+        formData.append('page_number', data.page.page_number)
+        if (data.roughsFile) {
+            formData.append('roughs', data.roughsFile[0]);
+        }
+        if (data.inksFile) {
+            formData.append('inks', data.inksFile[0]);
+        }
+        if (data.colorsFile) {
+            formData.append('colors', data.colorsFile[0]);
+        }
+        if (data.lettersFile) {
+            formData.append('letters', data.lettersFile[0]);
+        }
 
         try {
 
-            await axiosReq.put(`/page/${id}`, formData)
+            await axiosReq.put(`/page/${id}/`, formData);
+            history.push(`/book/${data.project.id}/`);
 
         } catch (err) {
-            console.log(err)
+            console.log(err.response)
             setErrors(err.response?.data);
-
+            console.log(errors)
         }
     }
 
@@ -132,7 +154,7 @@ const SinglePage = () => {
                             <Image src={data.active == 'roughs' ? data.roughs : data.active == 'inks' ? data.inks : data.active == 'colors' ? data.colors : data.letters} />
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className={styles.formControls}>
                         <Col xs={6} className={styles.pagetitle}>
                             <h2>
                                 {data.project.title} - {data.page.title}
@@ -161,11 +183,14 @@ const SinglePage = () => {
                     <Row>
                         <Col xs={12}>
                             <Form onSubmit={handleSubmit}>
-                                <Form.Label className="d-none">Update comic page</Form.Label>
-                                <Form.Control type="file" accept="image/png, image/jpeg" name='updatepage' onChange={imageHandler} />
+                                <div className={styles.formGroup}>
+                                    <Form.Label htmlFor='updatepage'>Update comic page</Form.Label>
+                                    <Form.Control className="d-none" type="file" accept="image/png, image/jpeg" name='updatepage' id='updatepage' onChange={imageHandler} />
+                                </div>
                                 <Button type="submit" className={appStyles.Btn}>
                                     Submit
                                 </Button>
+
                                 {errors.roughs?.map((message, idx) => (
                                     <p key={idx} className={styles.Form__Input_Warning}>
                                         {message}
@@ -176,21 +201,20 @@ const SinglePage = () => {
                         </Col>
                     </Row>
 
-                    <Row>
+                    <Row className={styles.commentSetter}>
                         <Col xs={12}>
                             <CommentForm
                                 page={data.page.id}
                                 setComments={setComments} />
+
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className={styles.comments}>
                         <Col xs={12}>
                             {comments.results.map(comment =>
-                                <Comment content={comment.content} author={32} timestamp={comment.created_at} owner={comment.owner} />
-
-
+                                <Comment content={comment.content} author={comment.owner_id} timestamp={comment.created_at} />
                             )}
-                            {console.log(comments)}
+
                         </Col>
                     </Row>
                 </Col>
