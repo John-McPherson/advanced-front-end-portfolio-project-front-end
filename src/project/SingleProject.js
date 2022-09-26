@@ -20,7 +20,7 @@ const SingleProject = () => {
             try {
                 const [{ data: projects }, { data: pages }] = await Promise.all([
                     axiosReq.get(`/project/${id}`),
-                    axiosReq.get(`/pages/`),
+                    axiosReq.get(`/pages/?project=${id}`),
                 ]);
                 setProjects({
                     projects: projects,
@@ -49,8 +49,7 @@ const SingleProject = () => {
 
     return (
         <Container className={styles.main__container}>
-            <Row>
-
+            <Row className="justify-content-center">
                 {projects.pages.map(page =>
                     < Col xs={4} md={2} className={styles.item} >
                         <Row>
