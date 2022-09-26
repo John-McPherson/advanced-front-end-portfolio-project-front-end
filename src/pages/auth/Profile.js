@@ -40,8 +40,11 @@ const ProfilePage = () => {
                     editor: profile.editor,
                     image: profile.image
                 })
-                setNewUsername(profile.name)
-
+                setNewUsername({
+                    old_username: profile.name,
+                    new_username: profile.name
+                }
+                )
 
 
             } catch (err) {
@@ -70,7 +73,14 @@ const ProfilePage = () => {
     });
     const { new_password1, new_password2 } = newPassword;
 
-    const [newUsername, setNewUsername] = useState("");
+    const [newUsername, setNewUsername] = useState({
+        old_username: '',
+        new_username: '',
+    });
+
+    const {
+        old_username,
+        new_username } = newUsername;
 
 
 
@@ -89,13 +99,6 @@ const ProfilePage = () => {
 
     const history = useHistory();
 
-    const handleChange = (e) => {
-        setProfile({
-            ...profileData,
-            [e.target.name]: e.target.value,
-
-        });
-    };
 
     const handleChangePassword = (e) => {
         setNewPassword({
@@ -108,6 +111,17 @@ const ProfilePage = () => {
 
 
     };
+    const handleDelete = async (e) => {
+        try {
+            await axiosReq.delete(`profiles/${currentUser.profile_id}/delete`)
+            await axios.post("/dj-rest-auth/logout/");
+            history.push("/")
+        } catch (err) {
+            console.log(err);
+            setErrors(err.response?.data);
+        }
+    };
+
 
     const handleChecked = (e) => {
         setProfile({
@@ -128,9 +142,9 @@ const ProfilePage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(newUsername)
+        console.log(new_username)
         const formData = new FormData();
-        // formData.append('name', newUsername);
+        formData.append('name', new_username);
         formData.append('writer', writer);
         formData.append('artist', artist);
         formData.append('colorist', colorist);
@@ -140,22 +154,25 @@ const ProfilePage = () => {
             formData.append("image", imageInput.current.files[0]);
         }
         const username = new FormData()
-        formData.append('username', newUsername)
+
+        username.append('username', new_username)
         try {
-            console.log(newUsername)
-            // await axiosRes.put("/dj-rest-auth/user/", username);
-            // setCurrentUser((prevUser) => ({
-            //     ...prevUser,
-            //     newUsername,
-            // }));
+            console.log(new_username)
+            if (!new_username == old_username) {
+                await axiosRes.put("/dj-rest-auth/user/", username);
+                setCurrentUser((prevUser) => ({
+                    ...prevUser,
+                    new_username,
+                }));
+            }
             if (new_password1) {
                 await axiosRes.post("/dj-rest-auth/password/change/", newPassword);
-                console.log('test')
             }
+
             await axiosReq.put(`/profiles/${currentUser.profile_id}/`, formData)
             history.push("/")
         } catch (err) {
-            // console.log(err);
+            console.log(err);
             setErrors(err.response?.data);
         }
 
@@ -174,8 +191,8 @@ const ProfilePage = () => {
                         <Form.Group controlId="username" className={styles.Form__Input_Group} >
                             <span><i className="fa-solid fa-user"></i></span>
                             <Form.Label className="d-none">Username</Form.Label>
-                            <Form.Control type="text" placeholder="newUsername" name='newUsername' value={newUsername}
-                                onChange={(event) => setNewUsername(event.target.value)} />
+                            <Form.Control type="text" placeholder="new_username" name='new_username' value={new_username}
+                                onChange={(event) => setNewUsername({ new_username: event.target.value })} />
                         </Form.Group>
                         {errors.username?.map((message, idx) => (
                             <p key={idx} className={styles.Form__Input_Warning}>
@@ -229,11 +246,6 @@ const ProfilePage = () => {
 
 
                     </Container>
-                    <Container className={styles.Link__Container}>
-                        <Link className={styles.Form__Link} to="/signin">
-                            Already have an account? <span>Sign in</span>
-                        </Link>
-                    </Container>
                 </Col>
                 <Col
                     md={6}
@@ -254,6 +266,8 @@ const ProfilePage = () => {
                     </Container>
 
 
+                    <Button onClick={handleDelete} className={appStyles.Btn}>
+                        Delete Profile                        </Button>
 
                 </Col>
             </Row >
