@@ -4,9 +4,27 @@
 @import "./mixins.less";
 
 .main__container {
-    width: 100vh;
+    // width: 100vh;
     min-height: 100vh;
     margin-top: 10vh;
+    display: flex;
+
+}
+
+.emptyProjectContainer {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+
+    >div {
+        text-align: center;
+    }
+
+    i {
+        font-size: 5em;
+    }
 }
 
 .item {
@@ -21,7 +39,7 @@
     img {
         width: 100%;
         border-radius: 10px;
-        background-color: red;
+
     }
 
     h2 {
