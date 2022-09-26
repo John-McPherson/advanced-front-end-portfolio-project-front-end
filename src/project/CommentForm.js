@@ -1,21 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Image, InputGroup } from 'react-bootstrap'
 import defaultImage from "../assets/images/default-profile.svg"
 import { axiosRes } from "../api/axiosDefaults"
 import styles from "../assets/css/Comment.module.css"
+import {
+    useCurrentUser
+} from "../contexts/CurrentUserContext";
 
 
 const CommentForm = (props) => {
     const [content, setContent] = useState("")
-
+    const [errors, setErrors] = useState({});
     const { page, setComments } = props;
+
+
+    const currentUser = useCurrentUser();
+
 
     const handleChange = (e) => {
         setContent(e.target.value)
+        console.log(currentUser.profile_image)
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(page)
+        console.log(content)
         try {
             const { data } = await axiosRes.post("/comments/", {
                 content,
@@ -28,14 +37,15 @@ const CommentForm = (props) => {
             setContent("");
 
         } catch (err) {
-            console.log(err);
+            setErrors(err.response?.data);
+
         }
     }
 
     return (
         <Form className={styles.commentForm} onSubmit={handleSubmit}>
             <InputGroup className={styles.commentContainer}>
-                <Image src={defaultImage} className={styles.profilePicture} />
+                <Image src={currentUser.profile_image ? currentUser.profile_image : defaultImage} className={styles.profilePicture} />
                 <Form.Control
                     placeholder="make a comment..."
                     as="textarea"
@@ -49,6 +59,11 @@ const CommentForm = (props) => {
                     comment
                 </button>
             </InputGroup>
+            {errors.content?.map((message, idx) => (
+                <p key={idx} className={styles.Form__Input_Warning}>
+                    {message}
+                </p>
+            ))}
         </Form>
     )
 }
