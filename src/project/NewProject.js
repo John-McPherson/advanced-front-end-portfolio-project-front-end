@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
 import defaultImage from "../assets/images/default-profile.svg"
-
 import formStyles from "../assets/css/Forms.module.css"
-
 import appStyles from "../App.module.css";
-
-
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
-import axios from 'axios';
 import { axiosReq } from "../api/axiosDefaults";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useSetCurrentUser } from "../contexts/CurrentUserContext";
@@ -95,13 +89,12 @@ const NewProject = () => {
         let roleName = e.target.name;
         let i = e.target.dataset.index
         role.roles[i][roleName] = e.target.value
-        console.log(e.target.value)
+      
 
 
 
         setRole({
             ...role,
-            // roles[0].[e.target.name]: e.target.value,
         });
 
         let updatedWriters = new Set();
@@ -111,7 +104,7 @@ const NewProject = () => {
         let updatedEditors = new Set();
 
         for (let x of role.roles) {
-            console.log(x)
+       
             if (x.username) {
 
                 if (x.role == 'writer') {
@@ -128,9 +121,6 @@ const NewProject = () => {
             }
         }
 
-
-        // updatedWriters = [...updatedWriters]
-        // updatedArtists = [...updatedArtists]
         updatedColorists = [...updatedColorists]
         updatedLetterers = [...updatedLetterers]
         updatedEditors = [...updatedEditors]
@@ -144,7 +134,7 @@ const NewProject = () => {
             letterers: [...updatedLetterers],
             editors: [...updatedEditors]
         });
-        console.log(projectData)
+
 
     };
 
@@ -180,11 +170,11 @@ const NewProject = () => {
         }
         if (colorists.length) {
             formData.append('colorists', colorists);
-            console.log(colorists)
+
         }
         if (letterers.length) {
             formData.append('letterers', letterers);
-            console.log(letterers)
+    
         }
 
         try {
@@ -192,7 +182,7 @@ const NewProject = () => {
             createPages(data.id)
             history.push(`/book/${data.id}`);
         } catch (err) {
-            console.log(err);
+     
             if (err.response?.status !== 401) {
                 setErrors(err.response?.data);
             }
@@ -200,7 +190,7 @@ const NewProject = () => {
     }
 
     const createPages = (projectId) => {
-        console.log(projectId)
+
         let pageNumber = 1;
         let pages = [{ book: projectId, pageTitle: 'cover', pageNumber: 0 }];
         while (pageNumber <= projectData.pages) {
@@ -218,15 +208,13 @@ const NewProject = () => {
             projectData.append("page_number", page.pageNumber);
             projectData.append("title", page.pageTitle);
             projectData.append("project", projectId);
-            console.log(page)
+     
             try {
                 await axiosReq.post("/pages/", projectData);
-                // history.push(`/project/${data.id}`);
+           
             } catch (err) {
-                console.log(err);
-                // if (err.response?.status !== 401) {
-                //     setErrors(err.response?.data);
-                // }
+             
+ 
             }
         })
     }

@@ -19,12 +19,11 @@ const CommentForm = (props) => {
 
     const handleChange = (e) => {
         setContent(e.target.value)
-        console.log(currentUser.profile_image)
+  
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(page)
-        console.log(content)
+
         try {
             const { data } = await axiosRes.post("/comments/", {
                 content,

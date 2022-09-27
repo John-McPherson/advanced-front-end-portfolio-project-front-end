@@ -29,7 +29,7 @@ const SingleProject = () => {
                 })
 
             } catch (err) {
-                console.log(err);
+       
             }
         };
         HandleMount();

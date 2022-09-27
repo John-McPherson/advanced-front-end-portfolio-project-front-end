@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-// import { Link } from "react-router-dom";
-// import defaultImage from "../../assets/images/default-profile.svg"
-
 import styles from "../../assets/css/SignInUpForm.module.css";
-// import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
-
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -33,7 +28,7 @@ const SignUpForm = () => {
             ...signInData,
             [e.target.name]: e.target.value,
         });
-        console.log(signInData)
+
 
     };
 
@@ -45,7 +40,7 @@ const SignUpForm = () => {
             setCurrentUser(data.user)
             history.push("/");
         } catch (err) {
-            console.log('called')
+   
             setErrors(err.response?.data);
 
         }

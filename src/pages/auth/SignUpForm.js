@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import defaultImage from "../../assets/images/default-profile.svg"
 
 import styles from "../../assets/css/SignInUpForm.module.css";
-// import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
 import { Form, Button, Col, Row, Container, Image } from "react-bootstrap";
@@ -100,7 +99,7 @@ const SignUpForm = () => {
         if (imageInput?.current?.files[0]) {
             formData.append("image", imageInput.current.files[0]);
         }
-        console.log(imageInput.current.files[0])
+
 
         try {
 

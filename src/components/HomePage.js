@@ -2,7 +2,7 @@ import React from 'react'
 import appStyles from "../App.module.css";
 import styles from "../assets/css/HomePage.module.css"
 import { NavLink } from 'react-router-dom'
-import { Form, Button, Col, Row, Container } from "react-bootstrap";
+import { Button  } from "react-bootstrap";
 
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import AllProjects from '../project/AllProjects';

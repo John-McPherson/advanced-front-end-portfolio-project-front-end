@@ -26,7 +26,7 @@ const Collaborators = ({ updateColabs, role, i }) => {
                 const [{ data: profiles }] = await Promise.all([
                     axiosReq.get(`/profiles/`),
                 ]);
-                console.log(profiles)
+     
 
                 setCreators({
                     artists: [profiles.filter(profile => profile.artist)],
@@ -35,16 +35,10 @@ const Collaborators = ({ updateColabs, role, i }) => {
                     colorists: [profiles.filter(profile => profile.colorist)],
                     letterers: [profiles.filter(profile => profile.letterer)],
                 })
-                // console.log(creators.artists)
-                // profiles.results.forEach(profile => {
-                //     if (profile.artist) {
-                //         console.log(profile)
-                //     }
-                // });
-                // console.log(profiles.results);
+
 
             } catch (err) {
-                console.log(err);
+          
             }
         };
         handleMount();

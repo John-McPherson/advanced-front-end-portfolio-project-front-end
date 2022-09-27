@@ -57,7 +57,7 @@ const SinglePage = () => {
 
 
             } catch (err) {
-                console.log(err);
+     
             }
         };
         HandleMount();
@@ -135,9 +135,9 @@ const SinglePage = () => {
             history.push(`/book/${data.project.id}/`);
 
         } catch (err) {
-            console.log(err.response)
+   
             setErrors(err.response?.data);
-            console.log(errors)
+      
         }
     }
 

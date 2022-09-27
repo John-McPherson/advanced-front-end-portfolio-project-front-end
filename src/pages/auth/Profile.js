@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
 import defaultImage from "../../assets/images/default-profile.svg"
 
 import styles from "../../assets/css/SignInUpForm.module.css";
-// import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
 import { Form, Button, Col, Row, Container, Image } from "react-bootstrap";
@@ -48,7 +46,7 @@ const ProfilePage = () => {
 
 
             } catch (err) {
-                console.log(err);
+
             }
         };
         HandleMount();
@@ -117,7 +115,6 @@ const ProfilePage = () => {
             await axios.post("/dj-rest-auth/logout/");
             history.push("/")
         } catch (err) {
-            console.log(err);
             setErrors(err.response?.data);
         }
     };
@@ -142,7 +139,7 @@ const ProfilePage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(new_username)
+
         const formData = new FormData();
         formData.append('name', new_username);
         formData.append('writer', writer);
@@ -157,7 +154,7 @@ const ProfilePage = () => {
 
         username.append('username', new_username)
         try {
-            console.log(new_username)
+
             if (!new_username == old_username) {
                 await axiosRes.put("/dj-rest-auth/user/", username);
                 setCurrentUser((prevUser) => ({
@@ -172,7 +169,6 @@ const ProfilePage = () => {
             await axiosReq.put(`/profiles/${currentUser.profile_id}/`, formData)
             history.push("/")
         } catch (err) {
-            console.log(err);
             setErrors(err.response?.data);
         }
 
