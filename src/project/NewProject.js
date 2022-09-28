@@ -1,228 +1,197 @@
-import React, { useState, useEffect } from "react";
-import defaultImage from "../assets/images/default-profile.svg"
-import formStyles from "../assets/css/Forms.module.css"
-import appStyles from "../App.module.css";
-import { Form, Button, Col, Row, Container } from "react-bootstrap";
-import { axiosReq } from "../api/axiosDefaults";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useSetCurrentUser } from "../contexts/CurrentUserContext";
-import Collaborators from "./Collaborators";
+import React, { useState } from 'react'
+import defaultImage from '../assets/images/default-profile.svg'
+import formStyles from '../assets/css/Forms.module.css'
+import appStyles from '../App.module.css'
+import { Form, Button, Col, Row, Container } from 'react-bootstrap'
+import { axiosReq } from '../api/axiosDefaults'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Collaborators from './Collaborators'
 
 const NewProject = () => {
+  const [collaborators, setCollaborators] = useState({
+    collaborators: [0, 1, 2]
+  })
 
+  const [projectData, setprojectData] = useState({
+    owner: '',
+    title: '',
+    color: false,
+    pages: 22,
+    writers: [],
+    artists: [],
+    colorists: [],
+    letterers: [],
+    editors: [],
+    image: defaultImage
+  })
 
-    const setCurrentUser = useSetCurrentUser();
+  const {
 
-    const [collaborators, setCollaborators] = useState({
-        collaborators: [0, 1, 2],
-    });
+    title,
 
+    color,
+    pages,
+    writers,
+    artists,
+    colorists,
+    letterers,
+    editors
+  } = projectData
 
+  const [errors, setErrors] = useState({})
 
-    const [projectData, setprojectData] = useState({
-        owner: '',
-        title: '',
-        color: false,
-        pages: 22,
-        writers: [],
-        artists: [],
-        colorists: [],
-        letterers: [],
-        editors: [],
-        image: defaultImage
-    });
+  const history = useHistory()
 
+  const handleChange = (e) => {
+    setprojectData({
+      ...projectData,
+      [e.target.name]: e.target.value
+    })
+  }
 
-    const {
+  const handleChecked = (e) => {
+    setprojectData({
+      ...projectData,
+      [e.target.name]: e.target.value === 'true'
+    })
+  }
 
-        title,
-        owner,
-        color,
-        pages,
-        writers,
-        artists,
-        colorists,
-        letterers,
-        editors,
-        image } = projectData;
+  const [role, setRole] = useState({
+    roles: [{
+      role: '',
+      username: ''
+    }, {
+      role: '',
+      username: ''
+    }, {
+      role: '',
+      username: ''
+    }
+    ]
+  })
 
+  const updateColabs = (e) => {
+    const roleName = e.target.name
+    const i = e.target.dataset.index
+    role.roles[i][roleName] = e.target.value
 
-
-
-    const [errors, setErrors] = useState({});
-
-    const history = useHistory();
-
-    const handleChange = (e) => {
-        setprojectData({
-            ...projectData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-
-    const handleChecked = (e) => {
-        setprojectData({
-            ...projectData,
-            [e.target.name]: e.target.value == 'true' ? true : false
-        });
-    };
-
-
-
-
-    const [role, setRole] = useState({
-        roles: [{
-            role: '',
-            username: ''
-        }, {
-            role: '',
-            username: ''
-        }, {
-            role: '',
-            username: ''
-        }
-        ]
+    setRole({
+      ...role
     })
 
-    const updateColabs = (e) => {
-        let roleName = e.target.name;
-        let i = e.target.dataset.index
-        role.roles[i][roleName] = e.target.value
-      
+    const updatedWriters = new Set()
+    const updatedArtists = new Set()
+    let updatedColorists = new Set()
+    let updatedLetterers = new Set()
+    let updatedEditors = new Set()
 
-
-
-        setRole({
-            ...role,
-        });
-
-        let updatedWriters = new Set();
-        let updatedArtists = new Set();
-        let updatedColorists = new Set();
-        let updatedLetterers = new Set();
-        let updatedEditors = new Set();
-
-        for (let x of role.roles) {
-       
-            if (x.username) {
-
-                if (x.role == 'writer') {
-                    updatedWriters.add(parseInt(x.username));
-                } else if (x.role == 'artist') {
-                    updatedArtists.add(parseInt(x.username));
-                } else if (x.role == 'colorist') {
-                    updatedColorists.add(parseInt(x.username));
-                } else if (x.role == 'editor') {
-                    updatedEditors.add(parseInt(x.username));
-                } else if (x.role == 'letterer') {
-                    updatedLetterers.add(parseInt(x.username));
-                }
-            }
+    for (const x of role.roles) {
+      if (x.username) {
+        if (x.role === 'writer') {
+          updatedWriters.add(parseInt(x.username))
+        } else if (x.role === 'artist') {
+          updatedArtists.add(parseInt(x.username))
+        } else if (x.role === 'colorist') {
+          updatedColorists.add(parseInt(x.username))
+        } else if (x.role === 'editor') {
+          updatedEditors.add(parseInt(x.username))
+        } else if (x.role === 'letterer') {
+          updatedLetterers.add(parseInt(x.username))
         }
-
-        updatedColorists = [...updatedColorists]
-        updatedLetterers = [...updatedLetterers]
-        updatedEditors = [...updatedEditors]
-
-
-        setprojectData({
-            ...projectData,
-            writers: [...updatedWriters],
-            artists: [...updatedArtists],
-            colorists: [...updatedColorists],
-            letterers: [...updatedLetterers],
-            editors: [...updatedEditors]
-        });
-
-
-    };
-
-    const addCollab = () => {
-        collaborators.collaborators = [...collaborators.collaborators, collaborators.collaborators.length]
-        role.roles = [...role.roles, { role: '', username: '' }]
-        setCollaborators({
-            ...collaborators,
-
-        });
-        setRole({
-            ...role,
-
-        }
-        )
+      }
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
+    updatedColorists = [...updatedColorists]
+    updatedLetterers = [...updatedLetterers]
+    updatedEditors = [...updatedEditors]
 
-        formData.append("title", title);
-        formData.append("color", color);
-        formData.append("pages", pages);
-        if (artists.length) {
-            formData.append('artists', artists);
-        }
-        if (writers.length) {
-            formData.append('writers', writers);
-        }
-        if (editors.length) {
-            formData.append('editors', editors);
-        }
-        if (colorists.length) {
-            formData.append('colorists', colorists);
+    setprojectData({
+      ...projectData,
+      writers: [...updatedWriters],
+      artists: [...updatedArtists],
+      colorists: [...updatedColorists],
+      letterers: [...updatedLetterers],
+      editors: [...updatedEditors]
+    })
+  }
 
-        }
-        if (letterers.length) {
-            formData.append('letterers', letterers);
-    
-        }
+  const addCollab = () => {
+    collaborators.collaborators = [...collaborators.collaborators, collaborators.collaborators.length]
+    role.roles = [...role.roles, { role: '', username: '' }]
+    setCollaborators({
+      ...collaborators
 
-        try {
-            const { data } = await axiosReq.post("/project/", formData);
-            createPages(data.id)
-            history.push(`/book/${data.id}`);
-        } catch (err) {
-     
-            if (err.response?.status !== 401) {
-                setErrors(err.response?.data);
-            }
-        }
+    })
+    setRole({
+      ...role
+
+    }
+    )
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formData = new FormData()
+
+    formData.append('title', title)
+    formData.append('color', color)
+    formData.append('pages', pages)
+    if (artists.length) {
+      formData.append('artists', artists)
+    }
+    if (writers.length) {
+      formData.append('writers', writers)
+    }
+    if (editors.length) {
+      formData.append('editors', editors)
+    }
+    if (colorists.length) {
+      formData.append('colorists', colorists)
+    }
+    if (letterers.length) {
+      formData.append('letterers', letterers)
     }
 
-    const createPages = (projectId) => {
-
-        let pageNumber = 1;
-        let pages = [{ book: projectId, pageTitle: 'cover', pageNumber: 0 }];
-        while (pageNumber <= projectData.pages) {
-
-            let page = {
-                book: projectId,
-                pageTitle: 'Page ' + pageNumber,
-                pageNumber: pageNumber
-            }
-            pages.push(page)
-            pageNumber++
-        }
-        pages.map(async (page) => {
-            const projectData = new FormData();
-            projectData.append("page_number", page.pageNumber);
-            projectData.append("title", page.pageTitle);
-            projectData.append("project", projectId);
-     
-            try {
-                await axiosReq.post("/pages/", projectData);
-           
-            } catch (err) {
-             
- 
-            }
-        })
+    try {
+      const { data } = await axiosReq.post('/project/', formData)
+      createPages(data.id)
+      history.push(`/book/${data.id}`)
+    } catch (err) {
+      if (err.response?.status !== 401) {
+        setErrors(err.response?.data)
+      }
     }
+  }
 
+  const createPages = (projectId) => {
+    let pageNumber = 1
+    const pages = [{ book: projectId, pageTitle: 'cover', pageNumber: 0 }]
+    while (pageNumber <= projectData.pages) {
+      const page = {
+        book: projectId,
+        pageTitle: 'Page ' + pageNumber,
+        pageNumber
+      }
+      pages.push(page)
+      pageNumber++
+    }
+    pages.map(async (page) => {
+      const projectData = new FormData()
+      projectData.append('page_number', page.pageNumber)
+      projectData.append('title', page.pageTitle)
+      projectData.append('project', projectId)
 
-    return (
+      try {
+        await axiosReq.post('/pages/', projectData)
+      } catch (err) {
+
+      }
+    })
+  }
+
+  return (
         <Form onSubmit={handleSubmit} className={formStyles.Form__Container__Main}>
-            <Row  >
+            <Row >
                 <Col className={` ${formStyles.Form__Container__Col}`} md={12}>
                     <Container className={appStyles.Remove__margins_paddings}>
 
@@ -241,7 +210,6 @@ const NewProject = () => {
                 </Col>
             </Row>
             <Row>
-
 
                 <Col className={` ${formStyles.Form__Container__Col}`} md={6}>
                     <Container className={appStyles.Remove__margins_paddings} >
@@ -264,8 +232,8 @@ const NewProject = () => {
                                 <div>
                                     <p>Color: </p>
                                 </div>
-                                <Form.Check inline className={projectData.color ? formStyles.Form__Input_Group__Skills__Selected : ''} label="Yes" value={true} name="color" checked={projectData.color} type="radio" id={`color-yes`} onChange={handleChecked} />
-                                <Form.Check inline className={projectData.color ? '' : formStyles.Form__Input_Group__Skills__Selected} label="No" value={false} name="color" checked={!projectData.color} type="radio" id={`color-no`} onChange={handleChecked} />
+                                <Form.Check inline className={projectData.color ? formStyles.Form__Input_Group__Skills__Selected : ''} label="Yes" value={true} name="color" checked={projectData.color} type="radio" id={'color-yes'} onChange={handleChecked} />
+                                <Form.Check inline className={projectData.color ? '' : formStyles.Form__Input_Group__Skills__Selected} label="No" value={false} name="color" checked={!projectData.color} type="radio" id={'color-no'} onChange={handleChecked} />
                             </div>
                         </Form.Group>
                         {errors.color?.map((message, idx) => (
@@ -287,10 +255,7 @@ const NewProject = () => {
             {collaborators.collaborators.map(x =>
                 <Row key={x}>
 
-
                     <Collaborators updateColabs={updateColabs} role={role} i={x} defaultValue={''} />
-
-
 
                 </Row >
 
@@ -329,17 +294,17 @@ const NewProject = () => {
             </Row >
 
             <Row>
-                <Col className={` ${formStyles.Form__Container__Col + " " + appStyles.Text_Center}`} xs={12}>
+                <Col className={` ${formStyles.Form__Container__Col + ' ' + appStyles.Text_Center}`} xs={12}>
                     <Container className={appStyles.Remove__margins_paddings} >
 
-                        <Button type="submit" className={`${appStyles.Btn + " " + appStyles.SmlBtn} `}>
+                        <Button type="submit" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn} `}>
                             add book
                         </Button>
                     </Container>
                 </Col>
             </Row >
         </Form >
-    );
-};
+  )
+}
 
-export default NewProject;
+export default NewProject

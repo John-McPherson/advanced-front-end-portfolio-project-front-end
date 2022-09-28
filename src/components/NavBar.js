@@ -1,36 +1,29 @@
-import React from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
-import logo from "../assets/images/makecomics-logo.svg";
-import styles from "../assets/css/NavBar.module.css";
+import React from 'react'
+import { Navbar, Container, Nav } from 'react-bootstrap'
+import logo from '../assets/images/makecomics-logo.svg'
+import styles from '../assets/css/NavBar.module.css'
 import { NavLink } from 'react-router-dom'
-import axios from 'axios';
-import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
+import axios from 'axios'
+import useClickOutsideToggle from '../hooks/useClickOutsideToggle'
 
-
-import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
+import { useCurrentUser, useSetCurrentUser } from '../contexts/CurrentUserContext'
 
 const NavBar = () => {
+  const currentUser = useCurrentUser()
+  const setCurrentUser = useSetCurrentUser()
 
-    const currentUser = useCurrentUser();
-    const setCurrentUser = useSetCurrentUser();
+  const { expanded, setExpanded, ref } = useClickOutsideToggle()
 
-    const { expanded, setExpanded, ref } = useClickOutsideToggle();
+  const handleSignOut = async () => {
+    try {
+      await axios.post('/dj-rest-auth/logout/')
+      setCurrentUser(null)
+    } catch (err) {
 
-    const handleSignOut = async () => {
-
-        try {
-            await axios.post("/dj-rest-auth/logout/");
-            setCurrentUser(null)
-
-        } catch (err) {
-
-
-        }
     }
+  }
 
-
-
-    return (
+  return (
         <Navbar expanded={expanded} expand="md" fixed="top" className={styles.NavBar}>
             <Container className={styles.NavBar__container}>
                 <NavLink to='/'>
@@ -38,8 +31,8 @@ const NavBar = () => {
                         <img src={logo} alt="logo" height="20" />
                     </Navbar.Brand>
                 </NavLink>
-                {currentUser ?
-                    <>
+                {currentUser
+                  ? <>
                         <Navbar.Toggle ref={ref} onClick={() => setExpanded(!expanded)} aria-controls="basic-navbar-nav" className={styles.NavBar__toggle} />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ml-auto">
@@ -61,12 +54,12 @@ const NavBar = () => {
                         </Navbar.Collapse>
                     </>
 
-                    : ""
+                  : ''
                 }
 
             </Container>
         </Navbar>
-    );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar

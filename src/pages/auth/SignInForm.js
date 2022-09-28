@@ -1,59 +1,52 @@
-import React, { useState } from "react";
-import styles from "../../assets/css/SignInUpForm.module.css";
-import appStyles from "../../App.module.css";
-import { Form, Button, Col, Row, Container } from "react-bootstrap";
-import axios from 'axios';
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
+import React, { useState } from 'react'
+import styles from '../../assets/css/SignInUpForm.module.css'
+import appStyles from '../../App.module.css'
+import { Form, Button, Col, Row, Container } from 'react-bootstrap'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useSetCurrentUser } from '../../contexts/CurrentUserContext'
 
 const SignUpForm = () => {
-    const setCurrentUser = useSetCurrentUser();
+  const setCurrentUser = useSetCurrentUser()
 
-    const [signInData, setsignInData] = useState({
-        username: '',
-        password: '',
+  const [signInData, setsignInData] = useState({
+    username: '',
+    password: ''
 
-    });
+  })
 
-    const { username,
-        password,
-    } = signInData;
+  const {
+    username,
+    password
+  } = signInData
 
-    const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({})
 
-    const history = useHistory();
+  const history = useHistory()
 
-    const handleChange = (e) => {
-        setsignInData({
-            ...signInData,
-            [e.target.name]: e.target.value,
-        });
+  const handleChange = (e) => {
+    setsignInData({
+      ...signInData,
+      [e.target.name]: e.target.value
+    })
+  }
 
-
-    };
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const { data } = await axios.post("/dj-rest-auth/login/", signInData);
-            setCurrentUser(data.user)
-            history.push("/");
-        } catch (err) {
-   
-            setErrors(err.response?.data);
-
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const { data } = await axios.post('/dj-rest-auth/login/', signInData)
+      setCurrentUser(data.user)
+      history.push('/')
+    } catch (err) {
+      setErrors(err.response?.data)
     }
+  }
 
-
-
-
-    return (
+  return (
         <Form onSubmit={handleSubmit}>
             <Row className={`${styles.Form__Container} ${styles.Form__Container__Signin}`} >
 
-                <Col className={` ${styles.Form__Container__Col}`}  >
+                <Col className={` ${styles.Form__Container__Col}`} >
                     <Container className={appStyles.Remove__margins_paddings} >
 
                         <Form.Group controlId="username" className={styles.Form__Input_Group} >
@@ -79,13 +72,9 @@ const SignUpForm = () => {
                             </p>
                         ))}
 
-
-
-
                         <Button type="submit" className={appStyles.Btn}>
                             sign up
                         </Button>
-
 
                     </Container>
 
@@ -93,7 +82,7 @@ const SignUpForm = () => {
 
             </Row >
         </Form >
-    );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm
