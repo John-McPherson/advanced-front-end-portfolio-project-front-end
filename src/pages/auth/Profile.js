@@ -5,7 +5,7 @@ import styles from '../../assets/css/SignInUpForm.module.css'
 import appStyles from '../../App.module.css'
 
 import { Form, Button, Col, Row, Container, Image } from 'react-bootstrap'
-import axios from 'axios'
+// import axios from 'axios'
 import { axiosRes, axiosReq } from '../../api/axiosDefaults'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
@@ -93,15 +93,15 @@ const ProfilePage = () => {
       [e.target.name]: e.target.value
     })
   }
-  const handleDelete = async (e) => {
-    try {
-      await axiosReq.delete(`profiles/${currentUser.profile_id}/delete`)
-      await axios.post('/dj-rest-auth/logout/')
-      history.push('/')
-    } catch (err) {
-      setErrors(err.response?.data)
-    }
-  }
+  // const handleDelete = async (e) => {
+  //   try {
+  //     await axiosReq.delete(`profiles/${currentUser.profile_id}/delete`)
+  //     await axios.post('/dj-rest-auth/logout/')
+  //     history.push('/')
+  //   } catch (err) {
+  //     setErrors(err.response?.data)
+  //   }
+  // }
 
   const handleChecked = (e) => {
     setProfile({
@@ -232,8 +232,8 @@ const ProfilePage = () => {
             </Form.Group>
           </Container>
 
-          <Button onClick={handleDelete} className={appStyles.Btn}>
-            Delete Profile                        </Button>
+          {/* <Button onClick={handleDelete} className={appStyles.Btn}>
+            Delete Profile                        </Button> */}
 
         </Col>
       </Row >
