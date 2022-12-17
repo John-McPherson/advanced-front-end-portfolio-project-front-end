@@ -6,6 +6,7 @@ import styles from '../assets/css/SinglePage.module.css'
 import appStyles from '../App.module.css'
 import CommentForm from './CommentForm'
 import Comment from './Comment'
+import Loading from '../components/Loading'
 
 const SinglePage = () => {
   const { id } = useParams()
@@ -42,7 +43,8 @@ const SinglePage = () => {
           roughs: pages.roughs,
           inks: pages.inks,
           colors: pages.colors,
-          letters: pages.letters
+          letters: pages.letters,
+          loaded: true
         })
         setComments({
           results: comments
@@ -66,7 +68,8 @@ const SinglePage = () => {
     colors: '',
     colorsFile: '',
     letters: '',
-    lettersFile: ''
+    lettersFile: '',
+    loaded: false
 
   })
   const [comments, setComments] = useState({
@@ -112,90 +115,101 @@ const SinglePage = () => {
     }
 
     try {
+      setData({
+        loaded: false
+      })
       await axiosReq.put(`/page/${id}/`, formData)
-      history.push(`/book/${data.project.id}/`)
+      alert(`${(data.page.page_number ? 'Page ' + data.page.page_number : 'cover')
+        } updated...`)
+      history.push(`/book/${data.project.id}`)
     } catch (err) {
       setErrors(err.response?.data)
     }
   }
 
   return (
-    <Container className={styles.main__container} fluid>
+    <React.Fragment>
+      {data.loaded
 
-      <Row>
+        ? < Container className={styles.main__container} fluid>
 
-        <Col xs={12} md={6}>
           <Row>
-            <Col className={styles.imgcol}>
-              <Image src={data.active === 'roughs' ? data.roughs : data.active === 'inks' ? data.inks : data.active === 'colors' ? data.colors : data.letters} />
+
+            <Col xs={12} md={6}>
+              <Row>
+                <Col className={styles.imgcol}>
+                  <Image src={data.active === 'roughs' ? data.roughs : data.active === 'inks' ? data.inks : data.active === 'colors' ? data.colors : data.letters} />
+                </Col>
+              </Row>
+              <Row className={styles.formControls}>
+                <Col xs={6} className={styles.pagetitle}>
+                  <h2>
+                    {data.project.title} - {data.page.title}
+                  </h2>
+                </Col>
+                <Col xs={6} className={styles.selectorcol} >
+                  <Form >
+                    <Form.Group controlId="activepage" >
+
+                      <div className={styles.page__selecter} >
+                        <Form.Check inline className={data.active === 'roughs' ? styles.page__selecter__selected : ''} label="roughs" value={'roughs'} name="active" checked={data.active === 'roughs'} type="checkbox" id={'roughs'} onChange={handleChecked} />
+                        <Form.Check inline className={data.active === 'inks' ? styles.page__selecter__selected : ''} label="inks" value={'inks'} name="active" checked={data.active === 'inks'} type="checkbox" id={'inks'} onChange={handleChecked} />
+                        {data.project.color
+                          ? <Form.Check inline className={data.active === 'colors' ? styles.page__selecter__selected : ''} label="colors" value={'colors'} name="active" checked={data.active === 'colors'} type="checkbox" id={'colors'} onChange={handleChecked} />
+                          : ''}
+                        <Form.Check inline className={data.active === 'letters' ? styles.page__selecter__selected : ''} label="letters" value={'letters'} name="active" checked={data.active === 'letters'} type="checkbox" id={'letters'} onChange={handleChecked} />
+
+                      </div>
+                    </Form.Group>
+                  </Form>
+                </Col>
+              </Row>
+
+            </Col>
+            <Col xs={12} md={6}>
+              <Row>
+                <Col xs={12}>
+                  <Form onSubmit={handleSubmit}>
+                    <div className={styles.formGroup}>
+                      <Form.Label htmlFor='updatepage'>Update comic page</Form.Label>
+                      <Form.Control className="d-none" type="file" accept="image/png, image/jpeg" name='updatepage' id='updatepage' onChange={imageHandler} />
+                    </div>
+                    <Button type="submit" className={appStyles.Btn}>
+                      Submit
+                    </Button>
+
+                    {errors.roughs?.map((message, idx) => (
+                      <p key={idx} className={styles.Form__Input_Warning}>
+                        {message}
+                      </p>
+                    ))}
+                  </Form>
+
+                </Col>
+              </Row>
+
+              <Row className={styles.commentSetter}>
+                <Col xs={12}>
+                  <CommentForm
+                    page={data.page.id}
+                    setComments={setComments} />
+
+                </Col>
+              </Row>
+              <Row className={styles.comments}>
+                <Col xs={12}>
+                  {comments.results.map((comment, ind) =>
+                    <Comment key={ind} content={comment.content} author={comment.owner_id} timestamp={comment.created_at} />
+                  )}
+
+                </Col>
+              </Row>
             </Col>
           </Row>
-          <Row className={styles.formControls}>
-            <Col xs={6} className={styles.pagetitle}>
-              <h2>
-                {data.project.title} - {data.page.title}
-              </h2>
-            </Col>
-            <Col xs={6} className={styles.selectorcol} >
-              <Form >
-                <Form.Group controlId="activepage" >
-
-                  <div className={styles.page__selecter} >
-                    <Form.Check inline className={data.active === 'roughs' ? styles.page__selecter__selected : ''} label="roughs" value={'roughs'} name="active" checked={data.active === 'roughs'} type="checkbox" id={'roughs'} onChange={handleChecked} />
-                    <Form.Check inline className={data.active === 'inks' ? styles.page__selecter__selected : ''} label="inks" value={'inks'} name="active" checked={data.active === 'inks'} type="checkbox" id={'inks'} onChange={handleChecked} />
-                    {data.project.color
-                      ? <Form.Check inline className={data.active === 'colors' ? styles.page__selecter__selected : ''} label="colors" value={'colors'} name="active" checked={data.active === 'colors'} type="checkbox" id={'colors'} onChange={handleChecked} />
-                      : ''}
-                    <Form.Check inline className={data.active === 'letters' ? styles.page__selecter__selected : ''} label="letters" value={'letters'} name="active" checked={data.active === 'letters'} type="checkbox" id={'letters'} onChange={handleChecked} />
-
-                  </div>
-                </Form.Group>
-              </Form>
-            </Col>
-          </Row>
-
-        </Col>
-        <Col xs={12} md={6}>
-          <Row>
-            <Col xs={12}>
-              <Form onSubmit={handleSubmit}>
-                <div className={styles.formGroup}>
-                  <Form.Label htmlFor='updatepage'>Update comic page</Form.Label>
-                  <Form.Control className="d-none" type="file" accept="image/png, image/jpeg" name='updatepage' id='updatepage' onChange={imageHandler} />
-                </div>
-                <Button type="submit" className={appStyles.Btn}>
-                  Submit
-                </Button>
-
-                {errors.roughs?.map((message, idx) => (
-                  <p key={idx} className={styles.Form__Input_Warning}>
-                    {message}
-                  </p>
-                ))}
-              </Form>
-
-            </Col>
-          </Row>
-
-          <Row className={styles.commentSetter}>
-            <Col xs={12}>
-              <CommentForm
-                page={data.page.id}
-                setComments={setComments} />
-
-            </Col>
-          </Row>
-          <Row className={styles.comments}>
-            <Col xs={12}>
-              {comments.results.map((comment, ind) =>
-                <Comment key={ind} content={comment.content} author={comment.owner_id} timestamp={comment.created_at} />
-              )}
-
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+        </Container>
+        : <Loading />
+      }
+    </React.Fragment >
 
   )
 }
