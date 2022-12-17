@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { axiosReq } from '../api/axiosDefaults'
-
 import { Col, Container, Image, Row } from 'react-bootstrap'
-
 import styles from '../assets/css/Summary.module.css'
+
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
 import { Link } from 'react-router-dom'
 
@@ -42,7 +41,7 @@ const SingleProject = () => {
       <Row className="justify-content-center">
         {console.log(projects)}
         {projects.pages.map(page =>
-          < Col xs={4} md={2} className={styles.item} key={page.id}>
+          <Col xs={4} md={2} className={styles.item} key={page.id}>
             <Row>
               <Col className={styles.item__image_container}>
                 <Image src={!page.letters.includes('default-page_xo6mbk', -19) ? page.letters : !page.colors.includes('default-page_xo6mbk', -19) ? page.colors : !page.inks.includes('default-page_xo6mbk', -19) ? page.inks : page.roughs} className='item__image' />
@@ -56,7 +55,13 @@ const SingleProject = () => {
               </Col>
             </Row>
           </Col>
+
         )}
+      </Row>
+      <Row className="justify-content-center">
+        <Col>
+          <Link to={`/editbook/${id}`}>edit book</Link>
+        </Col>
       </Row>
     </Container >
   )
