@@ -7,6 +7,7 @@ import { axiosReq } from '../api/axiosDefaults'
 import { useParams, useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import Collaborators from './Collaborators'
+import Loading from '../components/Loading'
 
 const EditProject = () => {
   const { id } = useParams()
@@ -27,9 +28,9 @@ const EditProject = () => {
           colorists: project.colorists,
           letterers: project.letterers,
           editors: project.editors,
-          image: project.image
+          image: project.image,
+          loaded: true
         })
-        console.log(project)
       } catch (err) {
 
       }
@@ -51,7 +52,8 @@ const EditProject = () => {
     colorists: [],
     letterers: [],
     editors: [],
-    image: defaultImage
+    image: defaultImage,
+    loaded: false
   })
 
   const {
@@ -64,7 +66,8 @@ const EditProject = () => {
     artists,
     colorists,
     letterers,
-    editors
+    editors,
+    loaded
   } = projectData
 
   const [errors, setErrors] = useState({})
@@ -202,108 +205,112 @@ const EditProject = () => {
     }
   }
   return (
-    <Form onSubmit={handleSubmit} className={formStyles.Form__Container__Main}>
-      <Row >
-        <Col className={` ${formStyles.Form__Container__Col}`} md={12}>
-          <Container className={appStyles.Remove__margins_paddings}>
+    <React.Fragment>
+      {loaded
+        ? <Form onSubmit={handleSubmit} className={formStyles.Form__Container__Main}>
+          <Row >
+            <Col className={` ${formStyles.Form__Container__Col}`} md={12}>
+              <Container className={appStyles.Remove__margins_paddings}>
 
-            <Form.Group controlId="title" className={formStyles.Form__Input_Group} >
+                <Form.Group controlId="title" className={formStyles.Form__Input_Group} >
 
-              <Form.Label>Title:</Form.Label>
-              <Form.Control type="text" placeholder="enter title here..." name='title' value={title}
-                onChange={handleChange} />
-            </Form.Group>
-            {errors.title?.map((message, idx) => (
-              <p key={idx} className={formStyles.Form__Input_Warning}>
-                {message}
-              </p>
-            ))}
-          </Container>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={` ${formStyles.Form__Container__Col}`} md={6}>
-          <Container className={appStyles.Remove__margins_paddings} >
-            <Form.Group controlId="color" >
-              <div className={formStyles.Form__Input_Group__Skills} >
-                <div>
-                  <p>Color: </p>
-                </div>
-                <Form.Check inline className={projectData.color ? formStyles.Form__Input_Group__Skills__Selected : ''} label="Yes" value={true} name="color" checked={projectData.color} type="radio" id={'color-yes'} onChange={handleChecked} />
-                <Form.Check inline className={projectData.color ? '' : formStyles.Form__Input_Group__Skills__Selected} label="No" value={false} name="color" checked={!projectData.color} type="radio" id={'color-no'} onChange={handleChecked} />
-              </div>
-            </Form.Group>
-            {errors.color?.map((message, idx) => (
-              <p key={idx} className={formStyles.Form__Input_Warning}>
-                {message}
-              </p>
-            ))}
-          </Container>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={` ${formStyles.Form__Container__Col__Colab}`} md={12}>
-          <Container className={appStyles.Remove__margins_paddings} >
+                  <Form.Label>Title:</Form.Label>
+                  <Form.Control type="text" placeholder="enter title here..." name='title' value={title}
+                    onChange={handleChange} />
+                </Form.Group>
+                {errors.title?.map((message, idx) => (
+                  <p key={idx} className={formStyles.Form__Input_Warning}>
+                    {message}
+                  </p>
+                ))}
+              </Container>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={` ${formStyles.Form__Container__Col}`} md={6}>
+              <Container className={appStyles.Remove__margins_paddings} >
+                <Form.Group controlId="color" >
+                  <div className={formStyles.Form__Input_Group__Skills} >
+                    <div>
+                      <p>Color: </p>
+                    </div>
+                    <Form.Check inline className={projectData.color ? formStyles.Form__Input_Group__Skills__Selected : ''} label="Yes" value={true} name="color" checked={projectData.color} type="radio" id={'color-yes'} onChange={handleChecked} />
+                    <Form.Check inline className={projectData.color ? '' : formStyles.Form__Input_Group__Skills__Selected} label="No" value={false} name="color" checked={!projectData.color} type="radio" id={'color-no'} onChange={handleChecked} />
+                  </div>
+                </Form.Group>
+                {errors.color?.map((message, idx) => (
+                  <p key={idx} className={formStyles.Form__Input_Warning}>
+                    {message}
+                  </p>
+                ))}
+              </Container>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={` ${formStyles.Form__Container__Col__Colab}`} md={12}>
+              <Container className={appStyles.Remove__margins_paddings} >
 
-            <p>Collaborators: </p>
-          </Container>
-        </Col>
-      </Row >
-      {collaborators.collaborators.map(x =>
-        <Row key={x}>
+                <p>Collaborators: </p>
+              </Container>
+            </Col>
+          </Row >
+          {collaborators.collaborators.map(x =>
+            <Row key={x}>
 
-          <Collaborators updateColabs={updateColabs} role={role} i={x} defaultValue={''} />
+              <Collaborators updateColabs={updateColabs} role={role} i={x} defaultValue={''} />
 
-        </Row >
+            </Row >
 
-      )}
-      {errors.writers?.map((message, idx) => (
-        <p key={idx} className={formStyles.Form__Input_Warning}>
-          Writers:  {message}
-        </p>
-      ))}
-      {errors.artists?.map((message, idx) => (
-        <p key={idx} className={formStyles.Form__Input_Warning}>
-          Artists:   {message}
-        </p>
-      ))}
-      {errors.colorists?.map((message, idx) => (
-        <p key={idx} className={formStyles.Form__Input_Warning}>
-          Colorists:  {message}
-        </p>
-      ))}
-      {errors.editors?.map((message, idx) => (
-        <p key={idx} className={formStyles.Form__Input_Warning}>
-          Editors:   {message}
-        </p>
-      ))}        {errors.letterers?.map((message, idx) => (
-        <p key={idx} className={formStyles.Form__Input_Warning}>
-          Letterers:   {message}
-        </p>
-      ))}
-      <Row>
-        <Col className={` ${formStyles.Form__Container__Col}`} md={12}>
-          <Container className={appStyles.Remove__margins_paddings} >
-            <p className={formStyles.Form__add_Collab} onClick={addCollab}>Add Collaborators</p>
-          </Container>
-        </Col>
+          )}
+          {errors.writers?.map((message, idx) => (
+            <p key={idx} className={formStyles.Form__Input_Warning}>
+              Writers:  {message}
+            </p>
+          ))}
+          {errors.artists?.map((message, idx) => (
+            <p key={idx} className={formStyles.Form__Input_Warning}>
+              Artists:   {message}
+            </p>
+          ))}
+          {errors.colorists?.map((message, idx) => (
+            <p key={idx} className={formStyles.Form__Input_Warning}>
+              Colorists:  {message}
+            </p>
+          ))}
+          {errors.editors?.map((message, idx) => (
+            <p key={idx} className={formStyles.Form__Input_Warning}>
+              Editors:   {message}
+            </p>
+          ))}        {errors.letterers?.map((message, idx) => (
+            <p key={idx} className={formStyles.Form__Input_Warning}>
+              Letterers:   {message}
+            </p>
+          ))}
+          <Row>
+            <Col className={` ${formStyles.Form__Container__Col}`} md={12}>
+              <Container className={appStyles.Remove__margins_paddings} >
+                <p className={formStyles.Form__add_Collab} onClick={addCollab}>Add Collaborators</p>
+              </Container>
+            </Col>
 
-      </Row >
+          </Row >
 
-      <Row>
-        <Col className={` ${formStyles.Form__Container__Col + ' ' + appStyles.Text_Center}`} xs={12}>
-          <Container className={appStyles.Remove__margins_paddings} >
+          <Row>
+            <Col className={` ${formStyles.Form__Container__Col + ' ' + appStyles.Text_Center}`} xs={12}>
+              <Container className={appStyles.Remove__margins_paddings} >
 
-            <Button type="submit" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn} `}>
-              update book
-            </Button>
-            <Button type="button" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn + ' ' + appStyles.warningBtn} `} onClick={deleteHandler}>
-              delete
-            </Button>
-          </Container>
-        </Col>
-      </Row >
-    </Form >
+                <Button type="submit" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn} `}>
+                  update book
+                </Button>
+                <Button type="button" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn + ' ' + appStyles.warningBtn} `} onClick={deleteHandler}>
+                  delete
+                </Button>
+              </Container>
+            </Col>
+          </Row >
+        </Form >
+        : <Loading />}
+    </React.Fragment>
   )
 }
 
