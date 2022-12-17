@@ -182,8 +182,9 @@ const EditProject = () => {
     }
 
     try {
-      const { data } = await axiosReq.post('/project/', formData)
-      history.push(`/book/${data.id}`)
+      await axiosReq.put(`/project/${id}`, formData)
+      alert(`data for ${title} has been updated`)
+      // history.push(`/book/${data.id}`)
     } catch (err) {
       if (err.response?.status !== 401) {
         setErrors(err.response?.data)
@@ -221,21 +222,6 @@ const EditProject = () => {
         </Col>
       </Row>
       <Row>
-
-        <Col className={` ${formStyles.Form__Container__Col}`} md={6}>
-          <Container className={appStyles.Remove__margins_paddings} >
-            <Form.Group controlId="pages" className={formStyles.Form__Input_Group}>
-
-              <Form.Label>Pages</Form.Label>
-              <Form.Control type="number" name='pages' value={pages} onChange={handleChange} />
-            </Form.Group>
-            {errors.pages?.map((message, idx) => (
-              <p key={idx} className={formStyles.Form__Input_Warning}>
-                {message}
-              </p>
-            ))}
-          </Container>
-        </Col>
         <Col className={` ${formStyles.Form__Container__Col}`} md={6}>
           <Container className={appStyles.Remove__margins_paddings} >
             <Form.Group controlId="color" >
@@ -309,7 +295,7 @@ const EditProject = () => {
           <Container className={appStyles.Remove__margins_paddings} >
 
             <Button type="submit" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn} `}>
-              add book
+              update book
             </Button>
             <Button type="button" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn + ' ' + appStyles.warningBtn} `} onClick={deleteHandler}>
               delete
