@@ -10,6 +10,7 @@ import NewProject from './project/NewProject'
 import SingleProject from './project/SingleProject'
 import SinglePage from './project/SinglePage'
 import ProfilePage from './pages/auth/Profile'
+import EditProject from './project/EditProject'
 
 export const CurrentUserContext = createContext()
 export const SetCurrentUserContext = createContext()
@@ -24,7 +25,7 @@ function App () {
           <Route exact path="/" render={() => <HomePage />} />
           <Route exact path="/addbook" render={() => <NewProject />} />
           <Route exact path="/book/:id" render={() => <SingleProject />} />
-          <Route exact path="/editbook/:id" render={() => <SingleProject />} />
+          <Route exact path="/editbook/:id" render={() => <EditProject />} />
           <Route exact path="/page/:id" render={() => <SinglePage />} />
           <Route exact path="/myprofile" render={() => <ProfilePage />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />

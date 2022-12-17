@@ -1,13 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import defaultImage from '../assets/images/default-profile.svg'
 import formStyles from '../assets/css/Forms.module.css'
 import appStyles from '../App.module.css'
 import { Form, Button, Col, Row, Container } from 'react-bootstrap'
 import { axiosReq } from '../api/axiosDefaults'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useParams, useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+
 import Collaborators from './Collaborators'
 
 const EditProject = () => {
+  const { id } = useParams()
+  useEffect(() => {
+    const HandleMount = async () => {
+      try {
+        const [{ data: project }] = await Promise.all([
+          axiosReq.get(`/project/${id}`)
+
+        ])
+        setprojectData({
+          owner: project.owner,
+          title: project.title,
+          color: project.color,
+          pages: project.pages,
+          writers: project.writers,
+          artists: project.artists,
+          colorists: project.colorists,
+          letterers: project.letterers,
+          editors: project.editors,
+          image: project.image
+        })
+        console.log(project)
+      } catch (err) {
+
+      }
+    }
+    HandleMount()
+  }, [id])
+
   const [collaborators, setCollaborators] = useState({
     collaborators: [0, 1, 2]
   })
@@ -162,6 +191,9 @@ const EditProject = () => {
     }
   }
 
+  const deleteHandler = () => {
+    console.log('button clicked')
+  }
   return (
     <Form onSubmit={handleSubmit} className={formStyles.Form__Container__Main}>
       <Row >
@@ -272,6 +304,9 @@ const EditProject = () => {
 
             <Button type="submit" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn} `}>
               add book
+            </Button>
+            <Button type="button" className={`${appStyles.Btn + ' ' + appStyles.SmlBtn + ' ' + appStyles.warningBtn} `} onClick={deleteHandler}>
+              delete
             </Button>
           </Container>
         </Col>

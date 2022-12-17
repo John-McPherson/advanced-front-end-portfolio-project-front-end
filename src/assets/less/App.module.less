@@ -33,10 +33,21 @@ body {
     font-size: 1.1em;
     border-radius: 0;
     transition: all .5s;
+    margin: 1vh .5vh;
 
     &:hover {
         color: @lightPrimary;
         background-color: @darkPrimary;
-        scale: 1.1;
+        scale: 1.05;
+    }
+}
+
+.warningBtn {
+    background-color: @warning;
+
+    &:hover {
+        color: @lightPrimary;
+        background-color: @warning;
+        scale: 1.05;
     }
 }
