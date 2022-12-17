@@ -8,6 +8,7 @@ import { Form, Button, Col, Row, Container, Image } from 'react-bootstrap'
 // import axios from 'axios'
 import { axiosRes, axiosReq } from '../../api/axiosDefaults'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Loading from '../../components/Loading'
 
 import {
   useCurrentUser,
@@ -32,7 +33,8 @@ const ProfilePage = () => {
           colorist: profile.colorist,
           letterer: profile.letterer,
           editor: profile.editor,
-          image: profile.image
+          image: profile.image,
+          loaded: true
         })
         setNewUsername({
           previousUsername: profile.name,
@@ -55,7 +57,8 @@ const ProfilePage = () => {
     colorist: false,
     letterer: false,
     editor: false,
-    image: defaultImage
+    image: defaultImage,
+    loaded: false
 
   })
   const [newPassword, setNewPassword] = useState({
@@ -153,91 +156,97 @@ const ProfilePage = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Row className={styles.Form__Container} >
+    <React.Fragment>
+      {profileData.loaded
 
-        <Col className={` ${styles.Form__Container__Col}`} md={6}>
-          <Container className={appStyles.Remove__margins_paddings} >
+        ? <Form onSubmit={handleSubmit}>
+          <Row className={styles.Form__Container} >
 
-            <Form.Group controlId="username" className={styles.Form__Input_Group} >
-              <span><i className="fa-solid fa-user"></i></span>
-              <Form.Label className="d-none">Username</Form.Label>
-              <Form.Control type="text" placeholder="updatedUsername" name='updatedUsername' value={updatedUsername}
-                onChange={(event) => setNewUsername({ updatedUsername: event.target.value })} />
-            </Form.Group>
-            {errors.username?.map((message, idx) => (
-              <p key={idx} className={styles.Form__Input_Warning}>
-                {message}
-              </p>
-            ))}
+            <Col className={` ${styles.Form__Container__Col}`} md={6}>
+              <Container className={appStyles.Remove__margins_paddings} >
 
-            <Form.Group controlId="newPassword1" className={styles.Form__Input_Group}>
-              <span><i className="fa-solid fa-lock"></i></span>
-              <Form.Label className="d-none">Password</Form.Label>
-              <Form.Control type="password" name='newPassword1' placeholder="password" value={newPassword1} onChange={handleChangePassword} />
-            </Form.Group>
-            {errors.newPassword1?.map((message, idx) => (
-              <p key={idx} className={styles.Form__Input_Warning}>
-                {message}
-              </p>
-            ))}
+                <Form.Group controlId="username" className={styles.Form__Input_Group} >
+                  <span><i className="fa-solid fa-user"></i></span>
+                  <Form.Label className="d-none">Username</Form.Label>
+                  <Form.Control type="text" placeholder="updatedUsername" name='updatedUsername' value={updatedUsername}
+                    onChange={(event) => setNewUsername({ updatedUsername: event.target.value })} />
+                </Form.Group>
+                {errors.username?.map((message, idx) => (
+                  <p key={idx} className={styles.Form__Input_Warning}>
+                    {message}
+                  </p>
+                ))}
 
-            <Form.Group controlId="newPassword2" className={styles.Form__Input_Group}>
-              <span><i className="fa-solid fa-lock"></i></span>
-              <Form.Label className="d-none">Confirm Password</Form.Label>
-              <Form.Control type="password" name='newPassword2' placeholder="confirm password" value={newPassword2} onChange={handleChangePassword} />
-            </Form.Group>
+                <Form.Group controlId="newPassword1" className={styles.Form__Input_Group}>
+                  <span><i className="fa-solid fa-lock"></i></span>
+                  <Form.Label className="d-none">Password</Form.Label>
+                  <Form.Control type="password" name='newPassword1' placeholder="password" value={newPassword1} onChange={handleChangePassword} />
+                </Form.Group>
+                {errors.newPassword1?.map((message, idx) => (
+                  <p key={idx} className={styles.Form__Input_Warning}>
+                    {message}
+                  </p>
+                ))}
 
-            {errors.newPassword2?.map((message, idx) => (
-              <p key={idx} className={styles.Form__Input_Warning}>
-                {message}
-              </p>
-            ))}
-            <Form.Group controlId="skillset" >
-              <div className={styles.Form__Input_Group}>
-                <span><i className="fa-solid fa-pen-ruler"></i></span>
-                <div>
-                  <p>skills</p>
-                </div>
-              </div>
-              <div className={styles.Form__Input_Group__Skills} >
-                <Form.Check inline className={profileData.writer ? styles.Form__Input_Group__Skills__Selected : ''} label="writer" value={writer} name="writer" checked={profileData.writer} type="checkbox" id={'writer'} onChange={handleChecked} />
-                <Form.Check inline className={profileData.artist ? styles.Form__Input_Group__Skills__Selected : ''} label="artist" value={artist} name="artist" checked={profileData.artist} type="checkbox" id={'artist'} onChange={handleChecked} />
-                <Form.Check inline className={profileData.colorist ? styles.Form__Input_Group__Skills__Selected : ''} label="colorist" value={colorist} name="colorist" checked={profileData.colorist} type="checkbox" id={'colorist'} onChange={handleChecked} />
-                <Form.Check inline className={profileData.letterer ? styles.Form__Input_Group__Skills__Selected : ''} label="letterer" name="letterer" value={letterer} checked={profileData.letterer} type="checkbox" id={'letterer'} onChange={handleChecked} />
-                <Form.Check inline className={profileData.editor ? styles.Form__Input_Group__Skills__Selected : ''} label="editor" name="editor" value={editor} checked={profileData.editor} type="checkbox" id={'editor'} onChange={handleChecked} />
-              </div>
-            </Form.Group>
+                <Form.Group controlId="newPassword2" className={styles.Form__Input_Group}>
+                  <span><i className="fa-solid fa-lock"></i></span>
+                  <Form.Label className="d-none">Confirm Password</Form.Label>
+                  <Form.Control type="password" name='newPassword2' placeholder="confirm password" value={newPassword2} onChange={handleChangePassword} />
+                </Form.Group>
 
-            <Button type="submit" className={appStyles.Btn}>
-              Update Profile                        </Button>
+                {errors.newPassword2?.map((message, idx) => (
+                  <p key={idx} className={styles.Form__Input_Warning}>
+                    {message}
+                  </p>
+                ))}
+                <Form.Group controlId="skillset" >
+                  <div className={styles.Form__Input_Group}>
+                    <span><i className="fa-solid fa-pen-ruler"></i></span>
+                    <div>
+                      <p>skills</p>
+                    </div>
+                  </div>
+                  <div className={styles.Form__Input_Group__Skills} >
+                    <Form.Check inline className={profileData.writer ? styles.Form__Input_Group__Skills__Selected : ''} label="writer" value={writer} name="writer" checked={profileData.writer} type="checkbox" id={'writer'} onChange={handleChecked} />
+                    <Form.Check inline className={profileData.artist ? styles.Form__Input_Group__Skills__Selected : ''} label="artist" value={artist} name="artist" checked={profileData.artist} type="checkbox" id={'artist'} onChange={handleChecked} />
+                    <Form.Check inline className={profileData.colorist ? styles.Form__Input_Group__Skills__Selected : ''} label="colorist" value={colorist} name="colorist" checked={profileData.colorist} type="checkbox" id={'colorist'} onChange={handleChecked} />
+                    <Form.Check inline className={profileData.letterer ? styles.Form__Input_Group__Skills__Selected : ''} label="letterer" name="letterer" value={letterer} checked={profileData.letterer} type="checkbox" id={'letterer'} onChange={handleChecked} />
+                    <Form.Check inline className={profileData.editor ? styles.Form__Input_Group__Skills__Selected : ''} label="editor" name="editor" value={editor} checked={profileData.editor} type="checkbox" id={'editor'} onChange={handleChecked} />
+                  </div>
+                </Form.Group>
 
-          </Container>
-        </Col>
-        <Col
-          md={6}
-          className={`  d-md-block  ${styles.Form__Container__Col}`}>
-          <Image src={profileData.image} roundedCircle className={styles.Profile__Picture} />
-          <Container>
+                <Button type="submit" className={appStyles.Btn}>
+                  Update Profile                        </Button>
 
-            <Form.Group controlId="profilepic" className={styles.Form__Input_Group}>
-              <span><i className="fa-solid fa-pen-ruler"></i></span>
-              <Form.Label className="d-none">Profile Picture</Form.Label>
-              <Form.Control type="file" accept="image/png, image/jpeg" name='profilepic' ref={imageInput} onChange={imageHandler} />
-              {errors.image?.map((message, idx) => (
-                <p key={idx} className={styles.Form__Input_Warning}>
-                  {message}
-                </p>
-              ))}
-            </Form.Group>
-          </Container>
+              </Container>
+            </Col>
+            <Col
+              md={6}
+              className={`  d-md-block  ${styles.Form__Container__Col}`}>
+              <Image src={profileData.image} roundedCircle className={styles.Profile__Picture} />
+              <Container>
 
-          {/* <Button onClick={handleDelete} className={appStyles.Btn}>
+                <Form.Group controlId="profilepic" className={styles.Form__Input_Group}>
+                  <span><i className="fa-solid fa-pen-ruler"></i></span>
+                  <Form.Label className="d-none">Profile Picture</Form.Label>
+                  <Form.Control type="file" accept="image/png, image/jpeg" name='profilepic' ref={imageInput} onChange={imageHandler} />
+                  {errors.image?.map((message, idx) => (
+                    <p key={idx} className={styles.Form__Input_Warning}>
+                      {message}
+                    </p>
+                  ))}
+                </Form.Group>
+              </Container>
+
+              {/* <Button onClick={handleDelete} className={appStyles.Btn}>
             Delete Profile                        </Button> */}
 
-        </Col>
-      </Row >
-    </Form >
+            </Col>
+          </Row >
+        </Form >
+        : <Loading />
+      }
+    </React.Fragment >
   )
 }
 
