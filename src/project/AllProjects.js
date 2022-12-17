@@ -44,10 +44,12 @@ const AllProjects = () => {
               ? ''
               : <Col xs={12} className={styles.emptyProjectContainer}>
                 <div>
-
-                  <i className="fa-solid fa-face-sad-cry"></i>
                   <h2>{projects.project}</h2>
-                  <Link to={'/addbook'}>Click here to get started</Link>
+                  <p>Welcome to makeComics a collaboration tool for comic creators.<br></br>
+                    You can create projects, share them with your your creative team <br></br>
+                    and provide feedback on each page.  <br></br><br></br>
+                  </p>
+                  <Link to={'/addbook'}>Click here to create your first project</Link>
                 </div>
               </Col>
             }
