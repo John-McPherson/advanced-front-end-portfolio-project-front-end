@@ -194,6 +194,7 @@ const EditProject = () => {
     try {
       console.log(`/project/${id}`)
       await axiosReq.delete(`/project/${id}`)
+      alert(`Project ${title} has been deleted`)
       history.push('/')
     } catch (err) {
       console.log(err.message)
