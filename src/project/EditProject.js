@@ -190,9 +190,14 @@ const EditProject = () => {
       }
     }
   }
-
-  const deleteHandler = () => {
-    console.log('button clicked')
+  const deleteHandler = async () => {
+    try {
+      console.log(`/project/${id}`)
+      await axiosReq.delete(`/project/${id}`)
+      history.push('/')
+    } catch (err) {
+      console.log(err.message)
+    }
   }
   return (
     <Form onSubmit={handleSubmit} className={formStyles.Form__Container__Main}>
