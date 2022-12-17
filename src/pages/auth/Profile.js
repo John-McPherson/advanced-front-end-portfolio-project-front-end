@@ -149,6 +149,7 @@ const ProfilePage = () => {
       }
 
       await axiosReq.put(`/profiles/${currentUser.profile_id}/`, formData)
+      alert('Profile updated')
       history.push('/')
     } catch (err) {
       setErrors(err.response?.data)
