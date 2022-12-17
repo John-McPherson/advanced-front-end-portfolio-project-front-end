@@ -18,7 +18,7 @@ const SingleProject = () => {
         ])
         setProjects({
           projects,
-          pages: pages
+          pages
 
         })
       } catch (err) {
