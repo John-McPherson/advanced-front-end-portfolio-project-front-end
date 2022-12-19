@@ -19,6 +19,7 @@ The application is designed to help comic creative teams organise and provide fe
     * [API](#api)
     * [Version Control](#version-control)
     * [Other Software](#other-software)
+* [Components](#Components)
 * [Deployment](#deployment)
 * [Credits](#credits)
     * [Content](#content)
@@ -27,10 +28,10 @@ The application is designed to help comic creative teams organise and provide fe
 
 ## UX
 ### User Stories
-<!-- 
-I used an agile methodology to devlop the app. The various features were broken up into the following user stories and grouped into epics where applicable.  -->
 
-<!-- As I started working on each user story they were further broken down into tasks. I tracked the progress of the user stories using github projects. You can see the current state of the project [here](https://github.com/John-McPherson/Full-Stack-Tool-Kit-Portfolio-Project/projects/1). -->
+I used an agile methodology to devlop the app. The various features were broken up into the following user stories and grouped into epics where applicable. 
+
+As I started working on each user story they were further broken down into tasks. I tracked the progress of the user stories using github projects. You can see the current state of the project [here](https://github.com/John-McPherson/Full-Stack-Tool-Kit-Portfolio-Project/projects/1).
 
 #### **Users should be able to create an account so their settings can persist over multiple sessions.** 
 
@@ -69,7 +70,7 @@ Here is a [link](https://xd.adobe.com/view/788249f5-1298-460f-9fe1-937747227c7e-
 
 ### Languages
 
-* JSX - as the makeComics is a react application the main body of the site was written in JSX
+* JSX - as the makeComics is a react application the main body of the site was written in JSX. 
 * Less CSS - the styling was handled though Less CSS. These were then compiled using the Easy LESS extension into CSS modules.
 
 
@@ -78,9 +79,9 @@ Here is a [link](https://xd.adobe.com/view/788249f5-1298-460f-9fe1-937747227c7e-
 
 
 ### Packages and frameworks
-* React - the site was built using the react framework.
-* Bootstrap4 - the site relies on the bootstrap libariy to quickly write and style html. 
-* Axios - was used to fetch and post data from and to the makeComics-api
+* React - the site was built using the react framework. This allowed me to keep the code modular, and will make maintence and future updates to the codebase easier. As well as helping with scalability, it also allows me to create [reusable components](#Components) to speed up the development process.
+* Bootstrap4 - the site relies on the bootstrap libariy to quickly write and style html. Bootstrap's comprehensive templates helped me quickly write styled html and allowed me to focus on functionality. Bootstraps grid system also allowed me to make the site responsive without having to write a lot of media queries.
+* Axios - was used to make secure network requests to the makeComics-api. I chose Axios over fetch api because of it's comprehensive browser supprt. 
 
 ### Version Control
 
@@ -93,6 +94,42 @@ Here is a [link](https://xd.adobe.com/view/788249f5-1298-460f-9fe1-937747227c7e-
 ### Fonts 
 * [Adobe fonts](https://fonts.adobe.com) - I used [Forma DJR Deck](https://fonts.adobe.com/fonts/forma-djr-deck) and [Garamond Premier](https://fonts.adobe.com/fonts/garamond-premier) font families from adobe fonts. They were licensed as part of my adobe creative cloud subscription. 
 * [Font Awesome](https://fontawesome.com/) - all icons were taken from Fontawesome. 
+
+## Components
+
+I used the following components during development.
+
+### Custom Components
+
+* NavBar - A simple colapsable nav bar component. providing easy access to all pages as well as containing the logout link. This 
+
+* Loading - this is a simple loading screen. It appears on all components that contain an api call (AllProjects, EditProject, SinglePage, and Profile) letting the user know that the page is loading content and preventing them from seeing empty pages before they're populated with data.
+
+* Comment - while comments are only present on the single project page at the moment I decided to make them a component as they could be reused in future feature rollouts as well as making the code more readable. For example adding comment functionality to the SingleProject component would allow users to comment on a project as a whole rather than on a page by page basis.
+
+* Comment form - a simple form for users to provide feedback on pages. Similar to the Comment component this is only used on the Single page component but was created as a seperate component for readablity and for future development. 
+
+### Bootstrap Components
+
+To make development quicker I used a lot of bootstraps prebuilt components. These include;
+
+* Col, Row, Container - used to create a responsive grid layout. These are used on most components as they provide the building blocks for the site. 
+
+* Button - used to create submit buttons as well as internal links. This is used on the Homepage, SignInForm, SignUpForm, EditProject, NewProject, SinglePage, and SingleProject Components.
+
+* Image - used to display images. This is used to display comics pages on AllProjects, SinglePage, SingleProject components and to display profile pictures on Profile, SignUpForm, Comment, CommentForm Components.
+
+* Nav, Navbar - used to quickly create the NavBar component. 
+
+* Form - used to quickly create forms including - CommentForm, Profile, SignUpForm, NewProject, EditProject Components. 
+
+### Future optimisation
+
+SignUpForm and Profile share a lot of the same code. If I was to develop this further I would create a single component to handle the shared code that way it would be easier to maintain and update. 
+
+And in a similar manner the EditProject and NewProject also share a lot of code. In the future I would create a single form component making these pages easier to maintain and update. 
+
+As these components are only used twice it isn't casuing too much problems at the current time but as the aplication expands I would want to address this. 
 
 
 ## Deployment
