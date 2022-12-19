@@ -31,7 +31,7 @@ The application is designed to help comic creative teams organise and provide fe
 
 I used an agile methodology to devlop the app. The various features were broken up into the following user stories and grouped into epics where applicable. 
 
-As I started working on each user story they were further broken down into tasks. I tracked the progress of the user stories using github projects. You can see the current state of the project [here](https://github.com/John-McPherson/Full-Stack-Tool-Kit-Portfolio-Project/projects/1).
+As I started working on each user story they were further broken down into tasks. I tracked the progress of the user stories using github projects. You can see the current state of the project [here](https://github.com/users/John-McPherson/projects/2).
 
 #### **Users should be able to create an account so their settings can persist over multiple sessions.** 
 
